@@ -1,0 +1,10 @@
+package: thanos
+
+slices:
+  bins:
+    contents:
+      /usr/bin/thanos:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/thanos-*.spdx.json:

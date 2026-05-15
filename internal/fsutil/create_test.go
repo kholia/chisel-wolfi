@@ -378,13 +378,13 @@ var createWriterTests = []createWriterTest{{
 		Path: "foo",
 		Mode: 0644 | fs.ModeDir,
 	},
-	error: `unsupported file type: \/[a-z0-9\-\/]*foo`,
+	error: `unsupported file type: \/[A-Za-z0-9_\-\/]*foo`,
 }, {
 	options: fsutil.CreateOptions{
 		Path: "foo",
 		Mode: 0644 | fs.ModeSymlink,
 	},
-	error: `unsupported file type: /[a-z0-9\-\/]*/foo`,
+	error: `unsupported file type: /[A-Za-z0-9_\-\/]*/foo`,
 }, {
 	options: fsutil.CreateOptions{
 		Path:        "foo/bar",
@@ -402,7 +402,7 @@ var createWriterTests = []createWriterTest{{
 		Mode:        0644,
 		MakeParents: false,
 	},
-	error: `open /[a-z0-9\-\/]*/foo/bar: no such file or directory`,
+	error: `open /[A-Za-z0-9_\-\/]*/foo/bar: no such file or directory`,
 }, {
 	options: fsutil.CreateOptions{
 		Root:        "/root",

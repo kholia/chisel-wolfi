@@ -1,0 +1,14 @@
+package: libssl3
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libcrypto3_libs:
+      openssl-4.0-libssl_libs:
+    contents:
+      /usr/lib/libssl.so.3:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libssl3-*.spdx.json:

@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
+	"go.yaml.in/yaml/v3"
 	. "gopkg.in/check.v1"
-	"gopkg.in/yaml.v3"
 
 	chisel "github.com/canonical/chisel/cmd/chisel"
 	"github.com/canonical/chisel/internal/archive"

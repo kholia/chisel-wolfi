@@ -1,0 +1,4 @@
+.git
+**/.DS_Store
+**/coverage.out
+examples/unbound-cache-comparison/artifacts/images/

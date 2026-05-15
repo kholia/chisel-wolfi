@@ -1,0 +1,30 @@
+package: postgresql-18
+
+slices:
+  bins:
+    essential:
+      ecpg-18_bins:
+      postgresql-18-base_runtime:
+      tzdata_zoneinfo:
+    contents:
+      /usr/bin/initdb:
+      /usr/bin/pg_archivecleanup:
+      /usr/bin/pg_checksums:
+      /usr/bin/pg_combinebackup:
+      /usr/bin/pg_config:
+      /usr/bin/pg_controldata:
+      /usr/bin/pg_createsubscriber:
+      /usr/bin/pg_ctl:
+      /usr/bin/pg_resetwal:
+      /usr/bin/pg_rewind:
+      /usr/bin/pg_test_fsync:
+      /usr/bin/pg_test_timing:
+      /usr/bin/pg_upgrade:
+      /usr/bin/pg_waldump:
+      /usr/bin/pg_walsummary:
+      /usr/bin/pgbench:
+      /usr/bin/postgres:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/postgresql-18-[0-9]*.spdx.json:

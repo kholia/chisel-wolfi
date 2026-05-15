@@ -1,0 +1,6 @@
+package: libxi
+
+slices:
+  libs:
+    essential:
+      libxi6_libs:

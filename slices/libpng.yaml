@@ -1,0 +1,6 @@
+package: libpng
+
+slices:
+  libs:
+    essential:
+      libpng16-16_libs:

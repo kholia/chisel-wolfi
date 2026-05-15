@@ -1,0 +1,19 @@
+package: google-cloud-sdk-core
+
+slices:
+  bins:
+    essential:
+      python-3.13-base_runtime:
+      py3.13-crcmod_libs:
+    contents:
+      /usr/bin/bq:
+      /usr/bin/docker-credential-gcloud:
+      /usr/bin/gcloud:
+      /usr/bin/git-credential-gcloud.sh:
+      /usr/bin/gsutil:
+      /usr/bin/java_dev_appserver.sh:
+      /usr/share/google-cloud-sdk/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/google-cloud-sdk-core-*.spdx.json:

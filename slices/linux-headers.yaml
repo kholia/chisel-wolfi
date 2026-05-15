@@ -1,0 +1,19 @@
+package: linux-headers
+
+slices:
+  dev:
+    contents:
+      /usr/include/headers_check.pl:
+      /usr/include/asm/**:
+      /usr/include/asm-generic/**:
+      /usr/include/cxl/**:
+      /usr/include/drm/**:
+      /usr/include/fwctl/**:
+      /usr/include/linux/**:
+      /usr/include/misc/**:
+      /usr/include/mtd/**:
+      /usr/include/rdma/**:
+      /usr/include/sound/**:
+      /usr/include/video/**:
+      /usr/include/xen/**:
+      /var/lib/db/sbom/linux-headers-*.spdx.json:

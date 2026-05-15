@@ -1,0 +1,103 @@
+{
+  "buildx.build.provenance": {
+    "builder": {
+      "id": ""
+    },
+    "buildType": "https://mobyproject.org/buildkit@v1",
+    "materials": [
+      {
+        "uri": "pkg:docker/cgr.dev/chainguard/wolfi-base@latest?platform=linux%2Farm64",
+        "digest": {
+          "sha256": "441d6709305552a3411e585ad98aacb9dadda00c80f3267483c38ac6f86f49d4"
+        }
+      },
+      {
+        "uri": "pkg:docker/docker/dockerfile@1",
+        "digest": {
+          "sha256": "87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89"
+        }
+      },
+      {
+        "uri": "pkg:docker/golang@1.26-alpine?platform=linux%2Farm64",
+        "digest": {
+          "sha256": "91eda9776261207ea25fd06b5b7fed8d397dd2c0a283e77f2ab6e91bfa71079d"
+        }
+      }
+    ],
+    "invocation": {
+      "configSource": {
+        "entryPoint": "Dockerfile.chisel-wolfi"
+      },
+      "parameters": {
+        "frontend": "gateway.v0",
+        "args": {
+          "build-arg:CHISEL_BUILDER_IMAGE": "golang:1.26-alpine",
+          "build-arg:CHISEL_SLICES": "wolfi-baselayout_base-library ca-certificates-bundle_certs bind-tools_bins unbound_bins unbound-config_config",
+          "build-arg:WOLFI_ALERTMANAGER_SLICE": "prometheus-alertmanager",
+          "build-arg:WOLFI_CLOUDSDK_PYTHON_BIN": "/usr/bin/python3.13",
+          "build-arg:WOLFI_COREDNS_SLICE": "coredns-1.14",
+          "build-arg:WOLFI_ENVOY_CONFIG_SLICE": "envoy-1.38-config",
+          "build-arg:WOLFI_ENVOY_SLICE": "envoy-1.38",
+          "build-arg:WOLFI_FALLBACK_PYTHON_BIN": "/usr/bin/python3.13",
+          "build-arg:WOLFI_FLUENT_BIT_SLICE": "fluent-bit-5.0",
+          "build-arg:WOLFI_GATEKEEPER_SLICE": "gatekeeper-3.21",
+          "build-arg:WOLFI_GETTEXT_SLICE": "gettext-envsubst",
+          "build-arg:WOLFI_GO_SLICE": "go-1.26",
+          "build-arg:WOLFI_GRAFANA_ALLOY_SLICE": "grafana-alloy",
+          "build-arg:WOLFI_GRAFANA_SLICE": "grafana-13.0",
+          "build-arg:WOLFI_IMAGE": "cgr.dev/chainguard/wolfi-base:latest",
+          "build-arg:WOLFI_JAVA_HOME": "/usr/lib/jvm/java-21-openjdk",
+          "build-arg:WOLFI_JAVA_SLICE": "openjdk-21",
+          "build-arg:WOLFI_KAFKA_SLICE": "kafka-4.2",
+          "build-arg:WOLFI_KUBECTL_SLICE": "kubectl-1.35",
+          "build-arg:WOLFI_KUBE_RBAC_PROXY_SLICE": "kube-rbac-proxy",
+          "build-arg:WOLFI_KUBE_STATE_METRICS_SLICE": "kube-state-metrics",
+          "build-arg:WOLFI_MAVEN_HOME": "/usr/share/java/maven",
+          "build-arg:WOLFI_MAVEN_SLICE": "maven-3.9",
+          "build-arg:WOLFI_MEMCACHED_SLICE": "memcached",
+          "build-arg:WOLFI_NATS_SLICE": "nats-server",
+          "build-arg:WOLFI_NGINX_SLICE": "nginx-mainline",
+          "build-arg:WOLFI_NODE_MINIMAL_SLICE": "nodejs-24-minimal",
+          "build-arg:WOLFI_NODE_SLICE": "nodejs-24",
+          "build-arg:WOLFI_OPA_ENVOY_SLICE": "opa-envoy",
+          "build-arg:WOLFI_OPA_SLICE": "opa",
+          "build-arg:WOLFI_OTEL_COLLECTOR_SLICE": "opentelemetry-collector-contrib",
+          "build-arg:WOLFI_PIP_SLICE": "py3.13-pip",
+          "build-arg:WOLFI_POSTGRES_SLICE": "postgresql-18",
+          "build-arg:WOLFI_PROMETHEUS_SLICE": "prometheus-3.11",
+          "build-arg:WOLFI_PYTHON_BIN": "/usr/bin/python3.14",
+          "build-arg:WOLFI_PYTHON_SLICE": "python-3.14-base",
+          "build-arg:WOLFI_SEMVER_SLICE": "py3.13-semver-bin",
+          "build-arg:WOLFI_THANOS_SLICE": "thanos",
+          "build-arg:WOLFI_VALKEY_SLICE": "valkey-9.0",
+          "cmdline": "docker/dockerfile:1",
+          "source": "docker/dockerfile:1"
+        },
+        "locals": [
+          {
+            "name": "context"
+          },
+          {
+            "name": "dockerfile"
+          }
+        ]
+      },
+      "environment": {
+        "platform": "linux/arm64"
+      }
+    }
+  },
+  "buildx.build.ref": "colima/colima/hlqvont5fqk5r11uix9im4hq2",
+  "containerimage.config.digest": "sha256:dd66e1b44a1e99cc5efe42aff5931720146d85fcce54633f36a5ef5827c27a19",
+  "containerimage.descriptor": {
+    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "digest": "sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035",
+    "size": 504,
+    "platform": {
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  },
+  "containerimage.digest": "sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035",
+  "image.name": "docker.io/library/chisel-demo:chisel-wolfi-unbound-cache"
+}

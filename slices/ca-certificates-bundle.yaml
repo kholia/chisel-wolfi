@@ -1,0 +1,15 @@
+package: ca-certificates-bundle
+
+slices:
+  certs:
+    essential:
+      wolfi-baselayout_base:
+    contents:
+      /etc/pki/tls/certs/ca-bundle.crt:
+      /etc/ssl/cert.pem:
+      /etc/ssl/certs/ca-bundle.crt:
+      /etc/ssl/certs/ca-certificates.crt:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ca-certificates-bundle-*.spdx.json:

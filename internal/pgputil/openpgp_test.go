@@ -1,7 +1,7 @@
 package pgputil_test
 
 import (
-	"golang.org/x/crypto/openpgp/packet"
+	"github.com/ProtonMail/go-crypto/openpgp/packet"
 	. "gopkg.in/check.v1"
 
 	"github.com/canonical/chisel/internal/pgputil"
@@ -49,7 +49,7 @@ var archiveKeyTests = []archiveKeyTest{{
 }, {
 	summary:  "Armored data: bad packets",
 	armor:    invalidPubKeyArmor,
-	relerror: "openpgp: .*",
+	relerror: "unexpected EOF",
 }}
 
 func (s *S) TestDecodeArchivePubKey(c *C) {
@@ -94,7 +94,7 @@ var verifyClearSignTests = []verifyClearSignTest{{
 	summary:   "Invalid data: improper hash",
 	clearData: invalidClearSignedData,
 	pubKeys:   []*packet.PublicKey{key1.PubKey},
-	relerror:  "openpgp: .*invalid signature: hash tag doesn't match.*",
+	relerror:  "openpgp: invalid signature: RSA verification failure",
 }, {
 	summary:   "Invalid data: bad packets",
 	clearData: invalidClearSignedDataBadPackets,

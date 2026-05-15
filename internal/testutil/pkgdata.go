@@ -3,6 +3,12 @@ package testutil
 import (
 	"archive/tar"
 	"bytes"
+	"compress/gzip"
+	"crypto"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
+	"io"
 	"strings"
 	"time"
 
@@ -122,6 +128,18 @@ func compressBytesZstd(input []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+func compressBytesGzip(input []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	writer := gzip.NewWriter(&buf)
+	if _, err := writer.Write(input); err != nil {
+		return nil, err
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
 func MakeDeb(entries []TarEntry) ([]byte, error) {
 	var buf bytes.Buffer
 
@@ -154,6 +172,206 @@ func MakeDeb(entries []TarEntry) ([]byte, error) {
 
 func MustMakeDeb(entries []TarEntry) []byte {
 	data, err := MakeDeb(entries)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func MakeAPK(entries []TarEntry, signed bool) ([]byte, error) {
+	var buf bytes.Buffer
+
+	if signed {
+		signatureTar, err := makeTar([]TarEntry{
+			Reg(0644, ".SIGN.RSA.test.rsa.pub", "signature"),
+		})
+		if err != nil {
+			return nil, err
+		}
+		signatureData, err := compressBytesGzip(signatureTar)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(signatureData)
+	}
+
+	payload, err := makeAPKPayload(entries)
+	if err != nil {
+		return nil, err
+	}
+	buf.Write(payload)
+
+	return buf.Bytes(), nil
+}
+
+func makeAPKPayload(entries []TarEntry) ([]byte, error) {
+	var buf bytes.Buffer
+
+	controlTar, err := makeTar([]TarEntry{
+		Reg(0644, ".PKGINFO", "pkgname = test-package\npkgver = 1.0-r0\narch = x86_64\n"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	controlData, err := compressBytesGzip(controlTar)
+	if err != nil {
+		return nil, err
+	}
+	buf.Write(controlData)
+
+	dataTar, err := makeTar(entries)
+	if err != nil {
+		return nil, err
+	}
+	data, err := compressBytesGzip(dataTar)
+	if err != nil {
+		return nil, err
+	}
+	buf.Write(data)
+
+	return buf.Bytes(), nil
+}
+
+func MakeSignedAPK(entries []TarEntry, key *rsa.PrivateKey, keyName string) ([]byte, error) {
+	payload, err := makeAPKPayload(entries)
+	if err != nil {
+		return nil, err
+	}
+	controlData, err := firstGzipMember(payload)
+	if err != nil {
+		return nil, err
+	}
+	signature, err := makeAPKSignature(controlData, key, keyName)
+	if err != nil {
+		return nil, err
+	}
+	return append(signature, payload...), nil
+}
+
+func MustMakeSignedAPK(entries []TarEntry, key *rsa.PrivateKey, keyName string) []byte {
+	data, err := MakeSignedAPK(entries, key, keyName)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func MustMakeAPK(entries []TarEntry, signed bool) []byte {
+	data, err := MakeAPK(entries, signed)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func MakeAPKIndex(index string, signed bool) ([]byte, error) {
+	var buf bytes.Buffer
+
+	if signed {
+		signatureTar, err := makeTar([]TarEntry{
+			Reg(0644, ".SIGN.RSA.test.rsa.pub", "signature"),
+		})
+		if err != nil {
+			return nil, err
+		}
+		signatureData, err := compressBytesGzip(signatureTar)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(signatureData)
+	}
+
+	indexTar, err := makeTar([]TarEntry{
+		Reg(0644, "DESCRIPTION", "test apk index\n"),
+		Reg(0644, "APKINDEX", index),
+	})
+	if err != nil {
+		return nil, err
+	}
+	indexData, err := compressBytesGzip(indexTar)
+	if err != nil {
+		return nil, err
+	}
+	buf.Write(indexData)
+
+	return buf.Bytes(), nil
+}
+
+func MakeSignedAPKIndex(index string, key *rsa.PrivateKey, keyName string) ([]byte, error) {
+	indexData, err := makeAPKIndexPayload(index)
+	if err != nil {
+		return nil, err
+	}
+	signature, err := makeAPKSignature(indexData, key, keyName)
+	if err != nil {
+		return nil, err
+	}
+	return append(signature, indexData...), nil
+}
+
+func MustMakeSignedAPKIndex(index string, key *rsa.PrivateKey, keyName string) []byte {
+	data, err := MakeSignedAPKIndex(index, key, keyName)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func makeAPKIndexPayload(index string) ([]byte, error) {
+	indexTar, err := makeTar([]TarEntry{
+		Reg(0644, "DESCRIPTION", "test apk index\n"),
+		Reg(0644, "APKINDEX", index),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return compressBytesGzip(indexTar)
+}
+
+func makeAPKSignature(payload []byte, key *rsa.PrivateKey, keyName string) ([]byte, error) {
+	if keyName == "" {
+		keyName = "test.rsa.pub"
+	}
+	sum := sha256.Sum256(payload)
+	signature, err := rsa.SignPKCS1v15(rand.Reader, key, crypto.SHA256, sum[:])
+	if err != nil {
+		return nil, err
+	}
+	signatureTar, err := makeTar([]TarEntry{{
+		Header: tar.Header{
+			Typeflag: tar.TypeReg,
+			Name:     ".SIGN.RSA256." + keyName,
+			Mode:     0644,
+		},
+		Content: signature,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	return compressBytesGzip(signatureTar)
+}
+
+func firstGzipMember(data []byte) ([]byte, error) {
+	reader := bytes.NewReader(data)
+	gzipReader, err := gzip.NewReader(reader)
+	if err != nil {
+		return nil, err
+	}
+	gzipReader.Multistream(false)
+	_, copyErr := io.Copy(io.Discard, gzipReader)
+	closeErr := gzipReader.Close()
+	if copyErr != nil {
+		return nil, copyErr
+	}
+	if closeErr != nil {
+		return nil, closeErr
+	}
+	memberEnd := len(data) - reader.Len()
+	return data[:memberEnd], nil
+}
+
+func MustMakeAPKIndex(index string, signed bool) []byte {
+	data, err := MakeAPKIndex(index, signed)
 	if err != nil {
 		panic(err)
 	}

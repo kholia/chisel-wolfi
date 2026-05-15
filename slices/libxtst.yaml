@@ -1,0 +1,6 @@
+package: libxtst
+
+slices:
+  libs:
+    essential:
+      libxtst6_libs:

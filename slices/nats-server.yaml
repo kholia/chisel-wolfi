@@ -1,0 +1,14 @@
+package: nats-server
+
+slices:
+  bins:
+    contents:
+      /usr/bin/nats-server:
+
+  config:
+    contents:
+      /etc/nats/nats-server.conf:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nats-server-*.spdx.json:

@@ -9,11 +9,10 @@ import (
 	"strings"
 
 	"github.com/jessevdk/go-flags"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 
 	"github.com/canonical/chisel/internal/archive"
 	"github.com/canonical/chisel/internal/cache"
-	"github.com/canonical/chisel/internal/deb"
 	"github.com/canonical/chisel/internal/setup"
 )
 
@@ -66,6 +65,8 @@ func (cmd *cmdDebugCheckReleaseArchives) Execute(args []string) error {
 	for archiveName, archiveInfo := range release.Archives {
 		openArchive, err := archiveOpen(&archive.Options{
 			Label:      archiveName,
+			Kind:       archiveInfo.Kind,
+			URL:        archiveInfo.URL,
 			Version:    archiveInfo.Version,
 			Arch:       cmd.Arch,
 			Suites:     archiveInfo.Suites,
@@ -73,6 +74,7 @@ func (cmd *cmdDebugCheckReleaseArchives) Execute(args []string) error {
 			Pro:        archiveInfo.Pro,
 			CacheDir:   cache.DefaultDir("chisel"),
 			PubKeys:    archiveInfo.PubKeys,
+			RSAPubKeys: archiveInfo.RSAPubKeys,
 			Maintained: archiveInfo.Maintained,
 			OldRelease: archiveInfo.OldRelease,
 		})
@@ -139,18 +141,18 @@ func computePathObservations(release *setup.Release, archives map[string]archive
 
 	pathObs := map[string][]pathObservation{}
 	for _, archiveName := range orderedArchives {
-		archive := archives[archiveName]
+		pkgArchive := archives[archiveName]
 		logf("Processing archive %s...", archiveName)
 		for _, pkgName := range orderedPkgs {
 			pkg := release.Packages[pkgName]
-			if !archive.Exists(pkg.RealName) {
+			if !pkgArchive.Exists(pkg.RealName) {
 				continue
 			}
-			pkgReader, _, err := archive.Fetch(pkg.RealName)
+			pkgReader, _, err := pkgArchive.Fetch(pkg.RealName)
 			if err != nil {
 				return nil, err
 			}
-			dataReader, err := deb.DataReader(pkgReader)
+			dataReader, err := archive.DataReader(pkgArchive.Options().Kind, pkgReader)
 			if err != nil {
 				return nil, err
 			}
@@ -260,13 +262,15 @@ func extractsParentPath(slice *setup.Slice, parent string) bool {
 	return false
 }
 
-// sanitizeTarPath removes the leading "./" from the source path in the tarball,
-// and verifies that the path is not empty.
+// sanitizeTarPath returns the tar path as an absolute package-root path.
 func sanitizeTarPath(path string) (string, bool) {
-	if len(path) < 3 || path[0] != '.' || path[1] != '/' {
+	if path == "" || path == "." || path == "./" || path[0] == '/' {
 		return "", false
 	}
-	return path[1:], true
+	if strings.HasPrefix(path, "./") {
+		return path[1:], true
+	}
+	return "/" + path, true
 }
 
 type yamlMode int64

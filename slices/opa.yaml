@@ -1,0 +1,10 @@
+package: opa
+
+slices:
+  bins:
+    contents:
+      /usr/bin/opa: {prefer: opa-envoy}
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/opa-[0-9]*.spdx.json:

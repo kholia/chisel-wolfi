@@ -224,7 +224,7 @@ func createHardLink(o *CreateOptions) error {
 	if err != nil {
 		return err
 	}
-	err = os.Link(o.Link, path)
+	err = linkNoFollow(o.Link, path)
 	if err != nil && os.IsExist(err) {
 		linkInfo, serr := os.Lstat(o.Link)
 		if serr != nil {

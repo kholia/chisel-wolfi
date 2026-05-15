@@ -1,0 +1,19 @@
+package: openbao-compat
+
+slices:
+  vault:
+    essential:
+      openbao_bins:
+    contents:
+      /usr/bin/vault:
+
+  entrypoint:
+    essential:
+      openbao-compat_vault:
+    contents:
+      /usr/bin/docker-entrypoint.sh:
+      /usr/local/bin/docker-entrypoint.sh:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openbao-compat-*.spdx.json:

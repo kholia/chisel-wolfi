@@ -1,0 +1,13 @@
+package: openssl-4.0-libssl
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      openssl-4.0-libcrypto_libs:
+    contents:
+      /usr/lib/libssl.so.4:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openssl-4.0-libssl-*.spdx.json:

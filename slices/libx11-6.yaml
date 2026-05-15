@@ -1,0 +1,15 @@
+package: libx11-6
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libxcb_libs:
+      libx11-data_data:
+    contents:
+      /usr/lib/libX11.so.6:
+      /usr/lib/libX11.so.6.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libx11-6-*.spdx.json:

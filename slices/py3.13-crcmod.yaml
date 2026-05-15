@@ -1,0 +1,13 @@
+package: py3.13-crcmod
+
+slices:
+  libs:
+    essential:
+      python-3.13-base_runtime:
+    contents:
+      /usr/lib/python3.13/site-packages/crcmod/**:
+      /usr/lib/python3.13/site-packages/crcmod-*.dist-info/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/py3.13-crcmod-*.spdx.json:

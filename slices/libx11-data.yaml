@@ -1,0 +1,10 @@
+package: libx11-data
+
+slices:
+  data:
+    contents:
+      /usr/share/X11/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libx11-data-*.spdx.json:

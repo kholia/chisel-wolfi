@@ -1,0 +1,16 @@
+package: yamllint
+
+slices:
+  bins:
+    essential:
+      py3.13-pathspec_libs:
+      py3.13-pyyaml_libs:
+      python-3.13-base_runtime:
+    contents:
+      /usr/bin/yamllint:
+      /usr/lib/python3.13/site-packages/yamllint/**:
+      /usr/lib/python3.13/site-packages/yamllint-*.dist-info/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/yamllint-*.spdx.json:

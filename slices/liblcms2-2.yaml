@@ -1,0 +1,16 @@
+package: liblcms2-2
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libjpeg-turbo_libs:
+      libpng_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/liblcms2.so.2:
+      /usr/lib/liblcms2.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/liblcms2-2-*.spdx.json:

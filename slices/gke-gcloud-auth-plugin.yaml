@@ -1,0 +1,13 @@
+package: gke-gcloud-auth-plugin
+
+slices:
+  bins:
+    essential:
+      google-cloud-sdk-core_bins:
+      kubectl-1.35_bins:
+    contents:
+      /usr/bin/gke-gcloud-auth-plugin:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gke-gcloud-auth-plugin-*.spdx.json:

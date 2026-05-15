@@ -82,6 +82,8 @@ func (cmd *cmdCut) Execute(args []string) error {
 	for archiveName, archiveInfo := range release.Archives {
 		openArchive, err := archive.Open(&archive.Options{
 			Label:      archiveName,
+			Kind:       archiveInfo.Kind,
+			URL:        archiveInfo.URL,
 			Version:    archiveInfo.Version,
 			Arch:       cmd.Arch,
 			Suites:     archiveInfo.Suites,
@@ -89,6 +91,7 @@ func (cmd *cmdCut) Execute(args []string) error {
 			Pro:        archiveInfo.Pro,
 			CacheDir:   cache.DefaultDir("chisel"),
 			PubKeys:    archiveInfo.PubKeys,
+			RSAPubKeys: archiveInfo.RSAPubKeys,
 			Maintained: archiveInfo.Maintained,
 			OldRelease: archiveInfo.OldRelease,
 		})

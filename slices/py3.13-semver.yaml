@@ -1,0 +1,13 @@
+package: py3.13-semver
+
+slices:
+  libs:
+    essential:
+      python-3.13-base_runtime:
+    contents:
+      /usr/lib/python3.13/site-packages/semver/**:
+      /usr/lib/python3.13/site-packages/semver-*.dist-info/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/py3.13-semver-[0-9]*.spdx.json:

@@ -1,0 +1,14 @@
+package: libxext6
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libx11_libs:
+    contents:
+      /usr/lib/libXext.so.6:
+      /usr/lib/libXext.so.6.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libxext6-*.spdx.json:

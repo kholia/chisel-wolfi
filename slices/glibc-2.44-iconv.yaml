@@ -1,0 +1,14 @@
+package: glibc-2.44-iconv
+
+slices:
+  data:
+    essential:
+      glibc-2.44_runtime:
+    contents:
+      /usr/bin/iconv:
+      /usr/bin/iconvconfig:
+      /usr/lib/gconv/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/glibc-2.44-iconv-*.spdx.json:

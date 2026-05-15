@@ -1,0 +1,4 @@
+image	matches	critical	high	medium	low	negligible	unknown	fixed	not-fixed	wont-fix	unknown-fix
+chisel-demo:ubuntu-2404-unbound-cache	166	0	0	142	22	2	0	17	128	21	0
+chisel-demo:ubuntu-2604-unbound-cache	11	0	6	5	0	0	0	11	0	0	0
+chisel-demo:chisel-wolfi-unbound-cache	0	0	0	0	0	0	0	0	0	0	0

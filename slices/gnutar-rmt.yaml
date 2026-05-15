@@ -1,0 +1,12 @@
+package: gnutar-rmt
+
+slices:
+  bins:
+    essential:
+      glibc-2.44_runtime:
+    contents:
+      /usr/libexec/rmt:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gnutar-rmt-*.spdx.json:

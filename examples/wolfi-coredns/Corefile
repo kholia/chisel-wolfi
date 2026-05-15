@@ -1,0 +1,8 @@
+.:53 {
+    errors
+    health
+    ready
+    prometheus :9153
+    forward . 1.1.1.1 8.8.8.8
+    cache 30
+}

@@ -3,7 +3,7 @@ package testutil
 import (
 	"log"
 
-	"golang.org/x/crypto/openpgp/packet"
+	"github.com/ProtonMail/go-crypto/openpgp/packet"
 
 	"github.com/canonical/chisel/internal/pgputil"
 )

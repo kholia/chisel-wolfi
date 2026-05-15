@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jessevdk/go-flags"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 
 	"github.com/canonical/chisel/internal/setup"
 )

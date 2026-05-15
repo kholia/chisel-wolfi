@@ -1,0 +1,12 @@
+package: glibc-2.44-locale-posix
+
+slices:
+  locale:
+    essential:
+      glibc-2.44_runtime:
+    contents:
+      /usr/lib/locale/C.utf8/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/glibc-2.44-locale-posix-*.spdx.json:

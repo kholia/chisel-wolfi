@@ -1,0 +1,12 @@
+package: flux
+
+slices:
+  bins:
+    essential:
+      glibc-2.44_runtime:
+    contents:
+      /usr/bin/flux:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/flux-*.spdx.json:

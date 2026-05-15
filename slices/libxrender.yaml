@@ -1,0 +1,6 @@
+package: libxrender
+
+slices:
+  libs:
+    essential:
+      libxrender1_libs:

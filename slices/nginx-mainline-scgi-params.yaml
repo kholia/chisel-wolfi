@@ -1,0 +1,11 @@
+package: nginx-mainline-scgi-params
+
+slices:
+  config:
+    contents:
+      /etc/nginx/scgi_params:
+      /etc/nginx/scgi_params.default:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-scgi-params-*.spdx.json:

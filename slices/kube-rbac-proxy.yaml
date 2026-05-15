@@ -1,0 +1,10 @@
+package: kube-rbac-proxy
+
+slices:
+  bins:
+    contents:
+      /usr/bin/kube-rbac-proxy:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/kube-rbac-proxy-*.spdx.json:

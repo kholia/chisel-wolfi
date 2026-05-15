@@ -1,0 +1,13 @@
+package: py3.13-pathspec
+
+slices:
+  libs:
+    essential:
+      python-3.13-base_runtime:
+    contents:
+      /usr/lib/python3.13/site-packages/pathspec/**:
+      /usr/lib/python3.13/site-packages/pathspec-*.dist-info/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/py3.13-pathspec-*.spdx.json:

@@ -1,0 +1,38 @@
+#0 building with "colima" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.ubuntu-26.04
+#1 transferring dockerfile: 587B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
+#3 resolve docker.io/docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/ubuntu:26.04
+#4 DONE 0.3s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 126B done
+#5 DONE 0.0s
+
+#6 [1/2] FROM docker.io/library/ubuntu:26.04@sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64
+#6 resolve docker.io/library/ubuntu:26.04@sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64 done
+#6 DONE 0.0s
+
+#7 [2/2] RUN apt-get update     && apt-get install -y --no-install-recommends         ca-certificates         dns-root-data         dnsutils         unbound     && rm -rf /var/lib/apt/lists/*     && install -D -o unbound -g unbound -m 0644 /usr/share/dns/root.key /var/lib/unbound/root.key     && unbound-checkconf /etc/unbound/unbound.conf
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:bfa96311d17a173b00c10364479bdea1981a49c0a8c104b57fbd81d89c87e8f5 done
+#8 exporting config sha256:dbb28068b04519c89802c75538f77fab3173c63be2ef66c56cff2c03ba9383a8 done
+#8 naming to docker.io/library/chisel-demo:ubuntu-2604-unbound-cache
+#8 naming to docker.io/library/chisel-demo:ubuntu-2604-unbound-cache done
+#8 unpacking to docker.io/library/chisel-demo:ubuntu-2604-unbound-cache done
+#8 DONE 0.0s
+
+#9 resolving provenance for metadata file
+#9 DONE 0.0s

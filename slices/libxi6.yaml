@@ -1,0 +1,15 @@
+package: libxi6
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libx11_libs:
+      libxext_libs:
+    contents:
+      /usr/lib/libXi.so.6:
+      /usr/lib/libXi.so.6.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libxi6-*.spdx.json:

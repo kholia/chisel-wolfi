@@ -1,0 +1,17 @@
+package: openssl-4.0
+
+slices:
+  bins:
+    essential:
+      glibc-2.44_runtime:
+      openssl-4.0-libcrypto_libs:
+      openssl-4.0-libssl_libs:
+    contents:
+      /etc/ssl/misc/CA.pl:
+      /etc/ssl/misc/tsget:
+      /etc/ssl/misc/tsget.pl:
+      /usr/bin/openssl:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openssl-4.0-[0-9]*.spdx.json:

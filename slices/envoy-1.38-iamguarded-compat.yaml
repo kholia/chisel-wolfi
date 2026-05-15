@@ -1,0 +1,17 @@
+package: envoy-1.38-iamguarded-compat
+
+slices:
+  compat:
+    essential:
+      envoy-1.38_bins:
+      envoy-1.38-config_config:
+    contents:
+      /opt/iamguarded/LICENSE-Chainguard:
+      /opt/iamguarded/NOTICE:
+      /opt/iamguarded/envoy/bin/envoy:
+      /opt/iamguarded/envoy/conf/envoy.yaml:
+      /usr/bin/run-script:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/envoy-1.38-iamguarded-compat-*.spdx.json:

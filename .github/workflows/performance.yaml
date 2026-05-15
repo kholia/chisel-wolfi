@@ -19,11 +19,11 @@ jobs:
           - name: head
             sha: ${{ github.event.pull_request.head.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ matrix.version.sha }}
 
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: 'go.mod'
 
@@ -31,7 +31,7 @@ jobs:
         run: |
           go build -o ${{ matrix.version.name }} ./cmd/chisel
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ${{ matrix.version.name }}
           path: ${{ matrix.version.name }}
@@ -43,17 +43,17 @@ jobs:
     name: Benchmark chisel info (chisel-releases 24.04)
     steps:
       - name: Download base
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: base
 
       - name: Download head
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: head
 
       - name: Download chisel-releases
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: canonical/chisel-releases
           ref: ubuntu-24.04
@@ -71,7 +71,7 @@ jobs:
           hyperfine --export-markdown "$msg_file" "./base info --release ./chisel-releases 'python3.12_core'" -n "BASE" "./head info --release ./chisel-releases 'python3.12_core'" -n "HEAD"
 
       - name: Upload result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: benchmark-report
           path: ${{ steps.benchmark.outputs.msg_file }}

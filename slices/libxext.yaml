@@ -1,0 +1,6 @@
+package: libxext
+
+slices:
+  libs:
+    essential:
+      libxext6_libs:

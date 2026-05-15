@@ -1,0 +1,13 @@
+package: libstdc++-dev
+
+slices:
+  dev:
+    essential:
+      libstdc++_libs:
+    contents:
+      /usr/include/c++/**:
+      /usr/lib/libstdc++.a:
+      /usr/lib/libstdc++.so:
+      /usr/lib/libsupc++.a:
+      /usr/share/gcc-16/python/libstdcxx/**:
+      /var/lib/db/sbom/libstdc++-dev-*.spdx.json:

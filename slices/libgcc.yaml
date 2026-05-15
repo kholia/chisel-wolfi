@@ -1,0 +1,10 @@
+package: libgcc
+
+slices:
+  libs:
+    contents:
+      /usr/lib/libgcc_s.so.1:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libgcc-*.spdx.json:

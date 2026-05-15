@@ -1,0 +1,64 @@
+[
+    {
+        "Id": "sha256:b49b282053514b7acd09f5bf6a08704491e0f33bf61d418874391e4891915f00",
+        "RepoTags": [
+            "chisel-demo:ubuntu-2404-unbound-cache"
+        ],
+        "RepoDigests": [
+            "chisel-demo@sha256:b49b282053514b7acd09f5bf6a08704491e0f33bf61d418874391e4891915f00"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-05-31T12:27:48.519477035+05:30",
+        "Config": {
+            "ExposedPorts": {
+                "53/tcp": {},
+                "53/udp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Entrypoint": [
+                "/usr/sbin/unbound"
+            ],
+            "Cmd": [
+                "-d",
+                "-c",
+                "/etc/unbound/unbound.conf"
+            ],
+            "Labels": {
+                "org.opencontainers.image.version": "24.04"
+            },
+            "ArgsEscaped": true
+        },
+        "Architecture": "arm64",
+        "Os": "linux",
+        "Size": 58931015,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:d9a56420aee7ff835e0c05fc666d1237d40f0da5fe338738e651b01db4672a5d",
+                "sha256:0168b4f0c87c85cca3b563ed07a7cce56c20042e350783134f3715452d67ebc4"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-05-31T06:57:50.463772604Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+            "digest": "sha256:b49b282053514b7acd09f5bf6a08704491e0f33bf61d418874391e4891915f00",
+            "size": 703,
+            "annotations": {
+                "config.digest": "sha256:7d69e03133697ce5e726392843f0cf23687e05d91ad1f51f111302a48b79a3a6"
+            }
+        },
+        "Identity": {
+            "Build": [
+                {
+                    "Ref": "3wrkxwlrekh2lemfwrr1vmbff",
+                    "CreatedAt": "2026-05-31T12:27:50.813178645+05:30"
+                }
+            ]
+        }
+    }
+]

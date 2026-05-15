@@ -44,10 +44,6 @@ linters:
         text: globalLogger.*unused
       - linters:
           - staticcheck
-        path: ^.*.go$
-        text: '"golang.org/x/crypto/openpgp/\w+" is deprecated'
-      - linters:
-          - staticcheck
         path: cmd/chisel/.*.go
         text: "ST1005:"
       - linters:

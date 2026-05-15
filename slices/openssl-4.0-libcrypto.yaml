@@ -1,0 +1,16 @@
+package: openssl-4.0-libcrypto
+
+slices:
+  libs:
+    essential:
+      glibc-2.44_runtime:
+      libbrotlidec1_libs:
+      libbrotlienc1_libs:
+    contents:
+      /etc/ssl/ca.cnf:
+      /etc/ssl/openssl.cnf:
+      /usr/lib/libcrypto.so.4:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openssl-4.0-libcrypto-*.spdx.json:

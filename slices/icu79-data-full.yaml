@@ -1,0 +1,10 @@
+package: icu79-data-full
+
+slices:
+  data:
+    contents:
+      /usr/share/icu/79.1/icudt79l.dat:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/icu79-data-full-*.spdx.json:

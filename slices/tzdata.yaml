@@ -1,0 +1,10 @@
+package: tzdata
+
+slices:
+  zoneinfo:
+    contents:
+      /usr/share/zoneinfo/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/tzdata-*.spdx.json:

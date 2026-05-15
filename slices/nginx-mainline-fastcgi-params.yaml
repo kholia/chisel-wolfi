@@ -1,0 +1,13 @@
+package: nginx-mainline-fastcgi-params
+
+slices:
+  config:
+    contents:
+      /etc/nginx/fastcgi.conf:
+      /etc/nginx/fastcgi.conf.default:
+      /etc/nginx/fastcgi_params:
+      /etc/nginx/fastcgi_params.default:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-fastcgi-params-*.spdx.json:

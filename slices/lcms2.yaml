@@ -1,0 +1,6 @@
+package: lcms2
+
+slices:
+  libs:
+    essential:
+      liblcms2-2_libs:

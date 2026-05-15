@@ -2,7 +2,7 @@ name: chisel-dev
 base: ubuntu@24.04
 sdks:
   - name: go # Necessary build and test toolchains.
-    channel: 1.25
+    channel: 1.27
     # Publisher:  Dmitry Lyfar (dlyfar)
     # https://github.com/canonical/go-sdk
   - name: vscode-remote # Standard tool for agentic work.

@@ -1,0 +1,10 @@
+package: icu78-data-full
+
+slices:
+  data:
+    contents:
+      /usr/share/icu/78.3/icudt78l.dat:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/icu78-data-full-*.spdx.json:

@@ -1,0 +1,12 @@
+package: grafana-13.0-oci-compat
+
+slices:
+  entrypoint:
+    essential:
+      bash_bins:
+    contents:
+      /opt/grafana/run.sh:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/grafana-13.0-oci-compat-*.spdx.json:

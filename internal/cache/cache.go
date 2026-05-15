@@ -2,6 +2,7 @@ package cache
 
 import (
 	"crypto/sha256"
+	"crypto/sha3"
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
@@ -10,8 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
-	"golang.org/x/crypto/sha3"
 )
 
 func DefaultDir(suffix string) string {
