@@ -1,0 +1,13 @@
+package: libunistring
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libunistring.so.5:
+      /usr/lib/libunistring.so.5.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libunistring-*.spdx.json:

@@ -1,0 +1,13 @@
+package: libnghttp2-14
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libnghttp2.so.14:
+      /usr/lib/libnghttp2.so.14.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libnghttp2-14-*.spdx.json:

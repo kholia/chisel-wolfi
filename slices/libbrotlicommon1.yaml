@@ -1,0 +1,13 @@
+package: libbrotlicommon1
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libbrotlicommon.so.1:
+      /usr/lib/libbrotlicommon.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libbrotlicommon1-*.spdx.json:

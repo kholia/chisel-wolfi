@@ -1,0 +1,13 @@
+package: libcrypto3
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /etc/ssl/ca.cnf:
+      /usr/lib/libcrypto.so.3:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libcrypto3-*.spdx.json:

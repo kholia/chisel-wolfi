@@ -1,0 +1,13 @@
+package: nghttp3
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libnghttp3.so.9:
+      /usr/lib/libnghttp3.so.9.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nghttp3-*.spdx.json:

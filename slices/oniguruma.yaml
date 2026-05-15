@@ -1,0 +1,13 @@
+package: oniguruma
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libonig.so.5:
+      /usr/lib/libonig.so.5.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/oniguruma-*.spdx.json:

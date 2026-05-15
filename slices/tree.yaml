@@ -1,0 +1,12 @@
+package: tree
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/tree:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/tree-*.spdx.json:

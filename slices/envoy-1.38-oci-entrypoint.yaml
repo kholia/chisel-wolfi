@@ -1,0 +1,12 @@
+package: envoy-1.38-oci-entrypoint
+
+slices:
+  entrypoint:
+    essential:
+      busybox_shell:
+    contents:
+      /var/lib/envoy/init/envoy-entrypoint.sh:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/envoy-1.38-oci-entrypoint-*.spdx.json:

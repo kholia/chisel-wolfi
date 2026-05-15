@@ -1,0 +1,14 @@
+package: libbrotlidec1
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libbrotlicommon1_libs:
+    contents:
+      /usr/lib/libbrotlidec.so.1:
+      /usr/lib/libbrotlidec.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libbrotlidec1-*.spdx.json:

@@ -1,0 +1,13 @@
+package: protoc
+
+slices:
+  bins:
+    essential:
+      libprotoc35.0.0_libs:
+    contents:
+      /usr/bin/protoc:
+      /usr/bin/protoc-35.0.0:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/protoc-*.spdx.json:

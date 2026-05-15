@@ -1,0 +1,15 @@
+package: less
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      ncurses_libs:
+    contents:
+      /usr/bin/less:
+      /usr/bin/lessecho:
+      /usr/bin/lesskey:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/less-*.spdx.json:

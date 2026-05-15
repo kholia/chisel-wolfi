@@ -1,0 +1,13 @@
+package: fstrm
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libfstrm.so.0:
+      /usr/lib/libfstrm.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/fstrm-*.spdx.json:

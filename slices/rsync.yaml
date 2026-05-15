@@ -1,0 +1,21 @@
+package: rsync
+
+slices:
+  bins:
+    essential:
+      bash_bins:
+      glibc_runtime:
+      libacl1_libs:
+      liblz4-1_libs:
+      libzstd1_libs:
+      popt_libs:
+      xxhash-libs_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/rrsync:
+      /usr/bin/rsync:
+      /usr/bin/rsync-ssl:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/rsync-*.spdx.json:

@@ -1,0 +1,39 @@
+package: ncurses
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      ncurses-terminfo-base_terminfo:
+    contents:
+      /usr/lib/libformw.so.6:
+      /usr/lib/libformw.so.6.*:
+      /usr/lib/libmenuw.so.6:
+      /usr/lib/libmenuw.so.6.*:
+      /usr/lib/libncursesw.so.6:
+      /usr/lib/libncursesw.so.6.*:
+      /usr/lib/libpanelw.so.6:
+      /usr/lib/libpanelw.so.6.*:
+      /usr/lib/libtinfo.so.6:
+      /usr/lib/libtinfo.so.6.*:
+      /usr/lib/terminfo:
+
+  bins:
+    essential:
+      ncurses_libs:
+    contents:
+      /usr/bin/captoinfo:
+      /usr/bin/clear:
+      /usr/bin/infocmp:
+      /usr/bin/infotocap:
+      /usr/bin/reset:
+      /usr/bin/tabs:
+      /usr/bin/tic:
+      /usr/bin/toe:
+      /usr/bin/tput:
+      /usr/bin/tset:
+      /usr/share/tabset/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ncurses-[0-9]*.spdx.json:

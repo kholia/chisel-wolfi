@@ -1,0 +1,12 @@
+package: tini
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/tini:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/tini-*.spdx.json:

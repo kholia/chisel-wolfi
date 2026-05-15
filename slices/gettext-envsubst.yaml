@@ -1,0 +1,12 @@
+package: gettext-envsubst
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/envsubst:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gettext-envsubst-*.spdx.json:

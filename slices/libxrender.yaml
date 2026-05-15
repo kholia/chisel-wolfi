@@ -1,0 +1,11 @@
+package: libxrender
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libx11_libs:
+    contents:
+      /usr/lib/libXrender.so.1:
+      /usr/lib/libXrender.so.1.*:
+      /var/lib/db/sbom/libxrender-*.spdx.json:

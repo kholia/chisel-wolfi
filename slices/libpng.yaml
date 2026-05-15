@@ -1,0 +1,11 @@
+package: libpng
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      zlib_libs:
+    contents:
+      /usr/lib/libpng16.so.16:
+      /usr/lib/libpng16.so.16.*:
+      /var/lib/db/sbom/libpng-*.spdx.json:

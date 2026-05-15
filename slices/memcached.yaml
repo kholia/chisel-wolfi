@@ -1,0 +1,17 @@
+package: memcached
+
+slices:
+  bins:
+    essential:
+      cyrus-sasl-heimdal-libs_libs:
+      glibc_runtime:
+      libcrypto3_libs:
+      libevent_libs:
+      libseccomp_libs:
+      libssl3_libs:
+    contents:
+      /usr/bin/memcached:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/memcached-*.spdx.json:

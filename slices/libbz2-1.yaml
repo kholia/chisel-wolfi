@@ -1,0 +1,13 @@
+package: libbz2-1
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libbz2.so.1:
+      /usr/lib/libbz2.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libbz2-1-*.spdx.json:

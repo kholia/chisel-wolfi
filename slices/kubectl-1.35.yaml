@@ -1,0 +1,13 @@
+package: kubectl-1.35
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/kubectl-1.35:
+      /usr/bin/kubectl: {symlink: /usr/bin/kubectl-1.35}
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/kubectl-1.35-*.spdx.json:

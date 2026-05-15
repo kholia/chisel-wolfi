@@ -1,0 +1,21 @@
+package: nginx-mainline
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libpcre2-8-0_libs:
+      libssl3_libs:
+      libxcrypt_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/nginx:
+
+  html:
+    contents:
+      /var/lib/nginx/html/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-[0-9]*.spdx.json:

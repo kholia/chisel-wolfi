@@ -1,0 +1,21 @@
+package: linux-pam
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libselinux_libs:
+      libxcrypt_libs:
+    contents:
+      /etc/pam.d/**:
+      /usr/lib/libpam.so.0:
+      /usr/lib/libpam.so.0.*:
+      /usr/lib/libpam_misc.so.0:
+      /usr/lib/libpam_misc.so.0.*:
+      /usr/lib/libpamc.so.0:
+      /usr/lib/libpamc.so.0.*:
+      /usr/lib/security/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/linux-pam-*.spdx.json:

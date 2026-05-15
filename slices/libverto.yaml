@@ -1,0 +1,13 @@
+package: libverto
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libverto.so.1:
+      /usr/lib/libverto.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libverto-*.spdx.json:

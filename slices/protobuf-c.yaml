@@ -1,0 +1,13 @@
+package: protobuf-c
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libprotobuf-c.so.1:
+      /usr/lib/libprotobuf-c.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/protobuf-c-*.spdx.json:

@@ -1,0 +1,12 @@
+package: docker-cli
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/docker:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/docker-cli-[0-9]*.spdx.json:

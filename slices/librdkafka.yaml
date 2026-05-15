@@ -1,0 +1,25 @@
+package: librdkafka
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libcurl-openssl4_libs:
+      libgcc_libs:
+      liblz4-1_libs:
+      libssl3_libs:
+      libstdc++_libs:
+      libzstd1_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/librdkafka++.so.1:
+      /usr/lib/librdkafka.so.1:
+
+  licenses:
+    contents:
+      /usr/share/licenses/librdkafka/LICENSES.txt:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/librdkafka-*.spdx.json:

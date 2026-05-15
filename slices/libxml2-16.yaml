@@ -1,0 +1,14 @@
+package: libxml2-16
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      zlib_libs:
+    contents:
+      /usr/lib/libxml2.so.16:
+      /usr/lib/libxml2.so.16.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libxml2-16-*.spdx.json:

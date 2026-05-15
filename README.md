@@ -1,5 +1,4 @@
 [![chisel](https://snapcraft.io/chisel/badge.svg)](https://snapcraft.io/chisel)
-[![Snap](https://github.com/canonical/chisel/actions/workflows/snap.yml/badge.svg?event=release)](https://github.com/canonical/chisel/actions/workflows/snap.yml)
 [![Build](https://github.com/canonical/chisel/actions/workflows/build.yml/badge.svg)](https://github.com/canonical/chisel/actions/workflows/build.yml)
 [![Tests](https://github.com/canonical/chisel/actions/workflows/tests.yaml/badge.svg)](https://github.com/canonical/chisel/actions/workflows/tests.yaml)
 
@@ -207,6 +206,102 @@ public-keys:
             -----END PGP PUBLIC KEY BLOCK-----
 ```
 
+APK repositories, such as Wolfi, use `kind: apk` and a repository URL instead
+of Ubuntu suites and components:
+
+```yaml
+format: v3
+
+archives:
+    wolfi:
+        kind: apk
+        url: https://packages.wolfi.dev/os
+```
+
+For APK archives, Chisel fetches `APKINDEX.tar.gz` and `.apk` packages from the
+architecture subdirectory under the configured URL.
+
+#### Wolfi Dockerfile example
+
+See [examples/wolfi-dockerfile](examples/wolfi-dockerfile) for a multi-stage
+Dockerfile that builds Chisel from this source tree, cuts Wolfi APK slices into
+a staging root file system, and copies the result into a `scratch` image.
+
+See [examples/wolfi-envoy](examples/wolfi-envoy) for a dedicated Envoy 1.38
+example built from Wolfi APK slices.
+
+See [examples](examples) for more Wolfi examples, including AWS CLI,
+Terraform, OpenBao, curl, wget, stunnel, Unbound, and a combined network/debug
+toolbox image.
+
+#### Motivational example: Unbound cache
+
+The [Unbound cache comparison](examples/unbound-cache-comparison) builds the
+same DNS cache shape three ways: from `ubuntu:24.04`, from `ubuntu:26.04`, and
+then from Wolfi APK slices cut by this repository into a `scratch` image.
+
+```bash
+examples/unbound-cache-comparison/run.sh
+```
+
+The run below was generated on 2026-05-31 for `linux/arm64` with Grype 0.112.0.
+The Dockerfiles live in the example directory, and the script saves build logs,
+smoke-test output, image metadata, Docker archive artifacts, and Grype
+table/JSON reports under
+[`examples/unbound-cache-comparison/artifacts`](examples/unbound-cache-comparison/artifacts).
+
+| Image | Build input | Docker inspect size | Grype result |
+| --- | --- | ---: | --- |
+| `chisel-demo:ubuntu-2404-unbound-cache` | `ubuntu:24.04` + `apt install --no-install-recommends ca-certificates dns-root-data dnsutils unbound` | 56.2 MiB | 166 matches: 142 medium, 22 low, 2 negligible |
+| `chisel-demo:ubuntu-2604-unbound-cache` | `ubuntu:26.04` + `apt install --no-install-recommends ca-certificates dns-root-data dnsutils unbound` | 55.0 MiB | 11 matches: 6 high, 5 medium |
+| `chisel-demo:chisel-wolfi-unbound-cache` | Local Chisel build + Wolfi slices for Unbound, CA certificates, and `dig` | 11.4 MiB | 0 matches |
+
+In this run, the 24.04 baseline shows the older LTS stream accumulating scanner
+matches across its base packages. The 26.04 baseline is much cleaner, but its
+findings are Go standard-library matches from `/usr/bin/pebble` in the base
+image. The Chisel/Wolfi image does not carry that base-image supervisor or a
+shell.
+
+As the Ubuntu 24.04 row shows, scanner-visible CVEs can keep accumulating even
+while the distribution is still under active maintenance. That is the point:
+maintainer support and near-zero scanner output are different properties.
+
+Provocative takeaway: the Ubuntu-style image is likely to get noisier over
+time. Backporting security fixes is valid, but scanners often cannot see
+patched-but-same-version packages, and that accounting does not scale
+indefinitely. The rolling Wolfi package stream keeps versions moving, giving
+rebuilt Chisel/Wolfi images a practical path to near-zero CVE results.
+
+Full reports:
+
+- Ubuntu 24.04:
+  [`ubuntu-24.04-unbound-cache.grype.txt`](examples/unbound-cache-comparison/artifacts/ubuntu-24.04-unbound-cache.grype.txt)
+  and
+  [`ubuntu-24.04-unbound-cache.grype.json`](examples/unbound-cache-comparison/artifacts/ubuntu-24.04-unbound-cache.grype.json)
+- Ubuntu 26.04:
+  [`ubuntu-26.04-unbound-cache.grype.txt`](examples/unbound-cache-comparison/artifacts/ubuntu-26.04-unbound-cache.grype.txt)
+  and
+  [`ubuntu-26.04-unbound-cache.grype.json`](examples/unbound-cache-comparison/artifacts/ubuntu-26.04-unbound-cache.grype.json)
+- Chisel/Wolfi:
+  [`chisel-wolfi-unbound-cache.grype.txt`](examples/unbound-cache-comparison/artifacts/chisel-wolfi-unbound-cache.grype.txt)
+  and
+  [`chisel-wolfi-unbound-cache.grype.json`](examples/unbound-cache-comparison/artifacts/chisel-wolfi-unbound-cache.grype.json)
+
+#### Wolfi security model
+
+Wolfi support is intended to pair Chisel's file-level minimization with a
+rolling release package stream. A rolling release strategy can publish fixed
+upstream package versions quickly, which is what makes a zero-CVE image target
+practical. Backporting-based distributions can be secure, but scanner findings
+often accumulate as `not-fixed` or won't-fix-style results because the visible
+package version does not move in the same way.
+
+See [docs/wolfi-security-model.md](docs/wolfi-security-model.md) for the
+philosophy, an example `ubuntu:noble` scan, and notes on FIPS and STIG support.
+
+See [docs/publishing-wolfi-images.md](docs/publishing-wolfi-images.md) for the
+GHCR test image publishing workflow and date-based image tag convention.
+
 #### Slice definitions
 
 There can be only **one slice definitions file** for each Ubuntu package, per
@@ -317,43 +412,14 @@ have additional information for identifying the kind of content to expect:
  `/slashed/path/to/dir/**` and no wildcards can appear apart from the trailing
  `**`.
 
-## TODO
+## References
 
-- [ ] Preserve ownerships when possible
-- [x] GPG signature checking for archives
-- [ ] Use a fake server for the archive tests
-- [ ] Functional tests
+- https://github.com/wolfi-dev/os/blob/main/LICENSE
 
+- https://github.com/canonical/chisel (upstream)
 
-## FAQ
+- https://github.com/canonical/chisel-releases
 
-#### May I use arbitrary package names?
+- https://github.com/robgil/claude-security-marketplace (very helpful for security scans)
 
-No, package names must reflect the package names in the archive,
-so that there's a single namespace to remember and respect.
-
-#### I've tried to use a different Ubuntu version and it failed?
-
-The mapping is manual for now. Let us know and we'll fix it.
-
-#### Can I use multiple repositories in a Chisel release?
-
-Not at the moment, but maybe eventually.
-
-#### Can I use non-Ubuntu repositories?
-
-Not at the moment, but eventually.
-
-#### Can multiple slices refer to the same path?
-
-Yes, but see below.
-
-#### Can multiple slices _output_ the same path?
-
-Yes, as long as either both slices are part of the same package,
-or the path is not extracted from a package at all (not copied)
-and the explicit inline definitions match exactly.
-
-#### Is file ownership preserved?
-
-Not right now, but it will be supported.
+- https://github.com/kholia/codex-security-marketplace

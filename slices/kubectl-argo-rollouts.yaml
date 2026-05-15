@@ -1,0 +1,12 @@
+package: kubectl-argo-rollouts
+
+slices:
+  bins:
+    essential:
+      wolfi-baselayout_base-library:
+    contents:
+      /usr/bin/kubectl-argo-rollouts:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/kubectl-argo-rollouts-*.spdx.json:

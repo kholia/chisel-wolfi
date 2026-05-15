@@ -1,0 +1,14 @@
+package: yarn
+
+slices:
+  bins:
+    essential:
+      nodejs-24_bins:
+    contents:
+      /usr/bin/yarn:
+      /usr/bin/yarnpkg:
+      /usr/share/node_modules/yarn/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/yarn-*.spdx.json:

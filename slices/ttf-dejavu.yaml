@@ -1,0 +1,7 @@
+package: ttf-dejavu
+
+slices:
+  fonts:
+    contents:
+      /usr/share/fonts/ttf-dejavu/**:
+      /var/lib/db/sbom/ttf-dejavu-*.spdx.json:

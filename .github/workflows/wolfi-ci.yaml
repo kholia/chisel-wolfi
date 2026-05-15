@@ -1,0 +1,262 @@
+name: Wolfi CI
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  DOCKER_BUILDKIT: "1"
+  GOFLAGS: -mod=readonly
+
+jobs:
+  go-tooling:
+    name: Go Tooling
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version-file: go.mod
+
+      - name: Run Go tests
+        run: go test -v ./...
+
+      - name: Build Chisel
+        run: go build -trimpath -ldflags="-s -w" -o chisel ./cmd/chisel
+
+      - name: Check Chisel binary
+        run: |
+          set -eux
+          test -x ./chisel
+          ./chisel version
+
+  wolfi-slices:
+    name: Wolfi Slices (${{ matrix.name }})
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: base-shell-x86_64
+            arch: x86_64
+            slice_set: CI_BASE_SHELL_SLICES
+          - name: base-shell-aarch64
+            arch: aarch64
+            slice_set: CI_BASE_SHELL_SLICES
+          - name: network-tools-x86_64
+            arch: x86_64
+            slice_set: CI_NETWORK_TOOLS_SLICES
+          - name: cloud-tools-x86_64
+            arch: x86_64
+            slice_set: CI_CLOUD_TOOLS_SLICES
+          - name: envoy-x86_64
+            arch: x86_64
+            slice_set: CI_ENVOY_SLICES
+          - name: language-runtime-x86_64
+            arch: x86_64
+            slice_set: CI_LANGUAGE_RUNTIME_SLICES
+          - name: language-runtime-aarch64
+            arch: aarch64
+            slice_set: CI_LANGUAGE_RUNTIME_SLICES
+          - name: language-build-x86_64
+            arch: x86_64
+            slice_set: CI_LANGUAGE_BUILD_SLICES
+          - name: language-build-aarch64
+            arch: aarch64
+            slice_set: CI_LANGUAGE_BUILD_SLICES
+          - name: common-ci-tools-x86_64
+            arch: x86_64
+            slice_set: CI_COMMON_CI_TOOLS_SLICES
+          - name: docker-ci-base-x86_64
+            arch: x86_64
+            slice_set: CI_DOCKER_CI_BASE_SLICES
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version-file: go.mod
+
+      - name: Build Chisel
+        run: go build -trimpath -ldflags="-s -w" -o chisel ./cmd/chisel
+
+      - name: Cut ${{ matrix.name }}
+        env:
+          CHISEL_ROOT: ${{ runner.temp }}/chisel-rootfs
+        run: |
+          set -eux
+          rm -rf "$CHISEL_ROOT"
+          mkdir -p "$CHISEL_ROOT"
+          slices="$(make -s -f examples/wolfi-common-slices.mk print-slices SLICE_SET="${{ matrix.slice_set }}")"
+          ./chisel cut \
+            --release examples/wolfi-release \
+            --root "$CHISEL_ROOT" \
+            --arch "${{ matrix.arch }}" \
+            $slices
+
+      - name: Verify ${{ matrix.name }}
+        env:
+          CHISEL_ROOT: ${{ runner.temp }}/chisel-rootfs
+        run: |
+          set -eux
+          wolfi_java_home="$(make -s -f examples/wolfi-versions.mk print-var VAR=WOLFI_JAVA_HOME)"
+          wolfi_python_bin="$(make -s -f examples/wolfi-versions.mk print-var VAR=WOLFI_PYTHON_BIN)"
+          test -f "$CHISEL_ROOT/etc/os-release"
+          test -f "$CHISEL_ROOT/lib/apk/db/installed"
+          case "${{ matrix.name }}" in
+            base-shell-*)
+              test -L "$CHISEL_ROOT/bin"
+              test -L "$CHISEL_ROOT/usr/bin/sh"
+              test -x "$CHISEL_ROOT/usr/bin/busybox"
+              ;;
+            network-tools-*)
+              test -x "$CHISEL_ROOT/usr/bin/curl"
+              test -x "$CHISEL_ROOT/usr/bin/wget"
+              test -x "$CHISEL_ROOT/usr/bin/stunnel"
+              test -x "$CHISEL_ROOT/usr/bin/unbound"
+              test -x "$CHISEL_ROOT/usr/bin/unbound-checkconf"
+              test -f "$CHISEL_ROOT/etc/stunnel/stunnel.conf-sample"
+              test -f "$CHISEL_ROOT/etc/unbound/unbound.conf"
+              ;;
+            cloud-tools-*)
+              test -L "$CHISEL_ROOT/usr/bin/aws"
+              test -x "$CHISEL_ROOT/opt/chainguard/aws-cli-2/bin/aws"
+              test -x "$CHISEL_ROOT$wolfi_python_bin"
+              test -x "$CHISEL_ROOT/usr/bin/terraform"
+              test -x "$CHISEL_ROOT/usr/bin/bao"
+              test -L "$CHISEL_ROOT/usr/bin/vault"
+              test -f "$CHISEL_ROOT/etc/ssl/certs/ca-certificates.crt"
+              ;;
+            envoy-*)
+              test -x "$CHISEL_ROOT/usr/bin/envoy"
+              test -f "$CHISEL_ROOT/etc/envoy/envoy.yaml"
+              ;;
+            language-runtime-*)
+              test -x "$CHISEL_ROOT/usr/bin/grpc-health-probe"
+              test -x "$CHISEL_ROOT/usr/bin/node"
+              test -x "$CHISEL_ROOT$wolfi_java_home/bin/java"
+              test -f "$CHISEL_ROOT/etc/ssl/certs/ca-certificates.crt"
+              ;;
+            language-build-*)
+              test -L "$CHISEL_ROOT/usr/bin/go"
+              test -x "$CHISEL_ROOT/usr/bin/gcc"
+              test -x "$CHISEL_ROOT/usr/bin/node"
+              test -L "$CHISEL_ROOT/usr/bin/npm"
+              test -L "$CHISEL_ROOT/usr/bin/yarn"
+              test -L "$CHISEL_ROOT/usr/bin/pnpm"
+              test -x "$CHISEL_ROOT$wolfi_java_home/bin/javac"
+              test -L "$CHISEL_ROOT/usr/bin/mvn"
+              ;;
+            common-ci-tools-*)
+              test -x "$CHISEL_ROOT/usr/bin/docker"
+              test -x "$CHISEL_ROOT/usr/libexec/docker/cli-plugins/docker-buildx"
+              test -x "$CHISEL_ROOT/usr/bin/docker-compose"
+              test -x "$CHISEL_ROOT/usr/bin/helm"
+              test -L "$CHISEL_ROOT/usr/bin/kubectl"
+              test -x "$CHISEL_ROOT/usr/bin/kubectl-argo-rollouts"
+              test -x "$CHISEL_ROOT/usr/bin/flux"
+              test -x "$CHISEL_ROOT/usr/bin/buf"
+              test -x "$CHISEL_ROOT/usr/bin/uv"
+              test -L "$CHISEL_ROOT/usr/bin/aws"
+              test -x "$CHISEL_ROOT/opt/chainguard/aws-cli-2/bin/aws"
+              test -x "$CHISEL_ROOT/usr/bin/terraform"
+              test -x "$CHISEL_ROOT/usr/bin/bao"
+              test -L "$CHISEL_ROOT/usr/bin/vault"
+              test -x "$CHISEL_ROOT/usr/bin/yq"
+              test -x "$CHISEL_ROOT/usr/bin/zip"
+              ;;
+            docker-ci-base-*)
+              test -x "$CHISEL_ROOT/usr/bin/docker"
+              test -x "$CHISEL_ROOT/usr/libexec/docker/cli-plugins/docker-buildx"
+              test -x "$CHISEL_ROOT/usr/bin/docker-compose"
+              test -x "$CHISEL_ROOT/usr/bin/envsubst"
+              test -x "$CHISEL_ROOT/usr/bin/pip3"
+              test -x "$CHISEL_ROOT/usr/bin/pysemver"
+              test -x "$CHISEL_ROOT/usr/bin/helm"
+              test -L "$CHISEL_ROOT/usr/bin/kubectl"
+              test -x "$CHISEL_ROOT/usr/bin/kubectl-argo-rollouts"
+              test -x "$CHISEL_ROOT/usr/bin/gcloud"
+              test -x "$CHISEL_ROOT/usr/bin/gke-gcloud-auth-plugin"
+              test -L "$CHISEL_ROOT/usr/bin/aws"
+              test -x "$CHISEL_ROOT/opt/chainguard/aws-cli-2/bin/aws"
+              test -x "$CHISEL_ROOT/usr/bin/bao"
+              test -L "$CHISEL_ROOT/usr/bin/vault"
+              test -x "$CHISEL_ROOT/usr/bin/yamllint"
+              test -x "$CHISEL_ROOT/usr/bin/uv"
+              test -x "$CHISEL_ROOT/usr/bin/uvx"
+              ;;
+            *)
+              echo "unknown slice smoke test: ${{ matrix.name }}" >&2
+              exit 1
+              ;;
+          esac
+
+  docker-examples:
+    name: Docker Example (${{ matrix.example }})
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        example:
+          - wolfi-dockerfile
+          - wolfi-prometheus
+          - wolfi-grafana
+          - wolfi-alertmanager
+          - wolfi-thanos
+          - wolfi-otel-collector
+          - wolfi-kube-state-metrics
+          - wolfi-kube-rbac-proxy
+          - wolfi-grafana-alloy
+          - wolfi-opa
+          - wolfi-opa-envoy
+          - wolfi-gatekeeper
+          - wolfi-nginx
+          - wolfi-k8s-tools
+          - wolfi-docker-cli
+          - wolfi-docker-base
+          - wolfi-valkey
+          - wolfi-memcached
+          - wolfi-postgres
+          - wolfi-kafka
+          - wolfi-nats-server
+          - wolfi-coredns
+          - wolfi-curl
+          - wolfi-wget
+          - wolfi-stunnel
+          - wolfi-unbound
+          - wolfi-network-tools
+          - wolfi-envoy
+          - wolfi-fluent-bit
+          - wolfi-go-build
+          - wolfi-go-runtime
+          - wolfi-node-build
+          - wolfi-node-runtime
+          - wolfi-java-build
+          - wolfi-java-runtime
+          - wolfi-aws-cli
+          - wolfi-terraform
+          - wolfi-vault
+          - wolfi-common-docker-toolbox
+          - wolfi-common-go-protoc
+          - wolfi-common-java-build
+          - wolfi-common-node-ui
+          - wolfi-common-unbound-cache
+          - wolfi-common-utility-base
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Build, test, and print image size
+        env:
+          IMAGE: chisel-wolfi:${{ matrix.example }}-ci
+        run: |
+          set -eux
+          make -C examples/${{ matrix.example }} IMAGE="$IMAGE" build test size

@@ -1,0 +1,17 @@
+package: unzip
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      zlib_libs:
+    contents:
+      /usr/bin/funzip:
+      /usr/bin/unzip:
+      /usr/bin/unzipsfx:
+      /usr/bin/zipgrep:
+      /usr/bin/zipinfo:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/unzip-*.spdx.json:

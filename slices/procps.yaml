@@ -1,0 +1,31 @@
+package: procps
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libproc-2-0_libs:
+      ncurses_libs:
+    contents:
+      /usr/bin/free:
+      /usr/bin/hugetop:
+      /usr/bin/kill:
+      /usr/bin/pgrep:
+      /usr/bin/pidof:
+      /usr/bin/pidwait:
+      /usr/bin/pkill:
+      /usr/bin/pmap:
+      /usr/bin/ps:
+      /usr/bin/pwdx:
+      /usr/bin/slabtop:
+      /usr/bin/sysctl:
+      /usr/bin/tload:
+      /usr/bin/top:
+      /usr/bin/uptime:
+      /usr/bin/vmstat:
+      /usr/bin/w:
+      /usr/bin/watch:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/procps-*.spdx.json:

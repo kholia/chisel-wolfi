@@ -1,0 +1,16 @@
+package: kafka-4.2
+
+slices:
+  runtime:
+    essential:
+      bash_bins:
+      coreutils_bins:
+      grep_bins:
+      openjdk-21_runtime:
+      sed_bins:
+    contents:
+      /usr/lib/kafka/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/kafka-4.2-*.spdx.json:

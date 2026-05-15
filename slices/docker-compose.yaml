@@ -1,0 +1,12 @@
+package: docker-compose
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/docker-compose:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/docker-compose-*.spdx.json:

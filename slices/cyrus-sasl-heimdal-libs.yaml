@@ -1,0 +1,18 @@
+package: cyrus-sasl-heimdal-libs
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      gdbm_libs:
+      heimdal-libs_libs:
+      libcrypto3_libs:
+      sqlite-libs_libs:
+    contents:
+      /usr/lib/libsasl2.so.3:
+      /usr/lib/libsasl2.so.3.*:
+      /usr/lib/sasl2/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/cyrus-sasl-heimdal-libs-*.spdx.json:

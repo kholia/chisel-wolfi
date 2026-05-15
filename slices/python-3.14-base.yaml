@@ -1,0 +1,30 @@
+package: python-3.14-base
+
+slices:
+  runtime:
+    essential:
+      glibc_runtime:
+      libbz2-1_libs:
+      libcrypto3_libs:
+      libexpat1_libs:
+      libffi_libs:
+      gdbm_libs:
+      libuuid_libs:
+      mpdecimal_libs:
+      ncurses_libs:
+      readline_libs:
+      sqlite-libs_libs:
+      libssl3_libs:
+      xz_libs:
+      zlib_libs:
+      libzstd1_libs:
+    contents:
+      /usr/bin/pydoc3.14:
+      /usr/bin/python3.14:
+      /usr/include/python3.14/pyconfig.h:
+      /usr/lib/libpython3.14.so.1.0:
+      /usr/lib/python3.14/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/python-3.14-base-*.spdx.json:

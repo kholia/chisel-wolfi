@@ -1,0 +1,19 @@
+package: psmisc
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      ncurses_libs:
+    contents:
+      /usr/bin/fuser:
+      /usr/bin/killall:
+      /usr/bin/peekfd:
+      /usr/bin/prtstat:
+      /usr/bin/pslog:
+      /usr/bin/pstree:
+      /usr/bin/pstree.x11:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/psmisc-*.spdx.json:

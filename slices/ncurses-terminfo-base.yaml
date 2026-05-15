@@ -1,0 +1,10 @@
+package: ncurses-terminfo-base
+
+slices:
+  terminfo:
+    contents:
+      /etc/terminfo/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ncurses-terminfo-base-*.spdx.json:

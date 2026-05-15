@@ -1,0 +1,16 @@
+package: libprotobuf35.0.0
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libabsl2601.0.0_libs:
+      libgcc_libs:
+      libstdc++_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libprotobuf.so.35.0.0:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libprotobuf35.0.0-*.spdx.json:

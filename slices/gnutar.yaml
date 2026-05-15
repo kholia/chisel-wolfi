@@ -1,0 +1,13 @@
+package: gnutar
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      gnutar-rmt_bins:
+    contents:
+      /usr/bin/tar:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gnutar-[0-9]*.spdx.json:

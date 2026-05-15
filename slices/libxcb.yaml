@@ -1,0 +1,15 @@
+package: libxcb
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libxau_libs:
+      libxdmcp_libs:
+    contents:
+      /usr/lib/libxcb*.so.0:
+      /usr/lib/libxcb*.so.0.*:
+      /usr/lib/libxcb*.so.1:
+      /usr/lib/libxcb*.so.1.*:
+      /usr/share/doc/libxcb/**:
+      /var/lib/db/sbom/libxcb-*.spdx.json:

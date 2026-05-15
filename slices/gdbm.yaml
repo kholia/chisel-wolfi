@@ -1,0 +1,23 @@
+package: gdbm
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libgdbm.so.6:
+      /usr/lib/libgdbm.so.6.*:
+      /usr/lib/libgdbm_compat.so.4:
+      /usr/lib/libgdbm_compat.so.4.*:
+
+  bins:
+    essential:
+      gdbm_libs:
+    contents:
+      /usr/bin/gdbm_dump:
+      /usr/bin/gdbm_load:
+      /usr/bin/gdbmtool:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gdbm-*.spdx.json:

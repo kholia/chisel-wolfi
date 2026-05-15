@@ -1,0 +1,12 @@
+package: mpfr
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      gmp_libs:
+    contents:
+      /usr/lib/libmpfr.so.6:
+      /usr/lib/libmpfr.so.6.*:
+      /usr/share/doc/mpfr/**:
+      /var/lib/db/sbom/mpfr-*.spdx.json:

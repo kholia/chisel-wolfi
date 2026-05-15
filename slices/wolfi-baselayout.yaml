@@ -1,0 +1,63 @@
+package: wolfi-baselayout
+
+slices:
+  layout:
+    contents:
+      /bin:
+      /lib:
+      /lib64:
+      /sbin:
+      /usr/lib64:
+      /usr/local/lib64:
+      /usr/sbin:
+      /usr/tmp:
+      /var/lock:
+      /var/run:
+
+  base:
+    essential:
+      wolfi-baselayout_layout:
+    contents:
+      /dev:
+      /etc/group: {mutable: true}
+      /etc/host.conf:
+      /etc/hosts:
+      /etc/mtab:
+      /etc/nsswitch.conf:
+      /etc/os-release:
+      /etc/passwd: {mutable: true}
+      /etc/profile:
+      /etc/profile.d/locale.sh:
+      /etc/protocols:
+      /etc/secfixes.d/wolfi:
+      /etc/services:
+      /etc/shadow:
+      /etc/shells:
+      /home:
+      /opt:
+      /proc:
+      /root:
+      /run:
+      /run/lock:
+      /sys:
+      /tmp:
+      /var/empty:
+      /var/log:
+      /var/spool/cron/crontabs:
+      /var/tmp:
+
+  base-library:
+    essential:
+      wolfi-baselayout_base:
+      glibc_runtime:
+      libxcrypt_libs:
+      libcrypto3_libs:
+      libssl3_libs:
+      libevent_libs:
+      libexpat1_libs:
+      libsodium_libs:
+      unbound-libs_libs:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/wolfi-baselayout-*.spdx.json:

@@ -1,0 +1,14 @@
+package: libabsl2601.0.0
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libgcc_libs:
+      libstdc++_libs:
+    contents:
+      /usr/lib/libabsl*.so.2601.0.0:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libabsl2601.0.0-*.spdx.json:

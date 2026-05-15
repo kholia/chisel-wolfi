@@ -1,0 +1,14 @@
+package: libx11
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libxcb_libs:
+    contents:
+      /usr/lib/libX11-xcb.so.1:
+      /usr/lib/libX11-xcb.so.1.*:
+      /usr/lib/libX11.so.6:
+      /usr/lib/libX11.so.6.*:
+      /usr/share/X11/**:
+      /var/lib/db/sbom/libx11-*.spdx.json:

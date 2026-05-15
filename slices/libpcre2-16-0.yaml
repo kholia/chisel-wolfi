@@ -1,0 +1,13 @@
+package: libpcre2-16-0
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libpcre2-16.so.0:
+      /usr/lib/libpcre2-16.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libpcre2-16-0-*.spdx.json:

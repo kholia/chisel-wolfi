@@ -1,0 +1,10 @@
+package: openbao
+
+slices:
+  bins:
+    contents:
+      /usr/bin/bao:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openbao-[0-9]*.spdx.json:

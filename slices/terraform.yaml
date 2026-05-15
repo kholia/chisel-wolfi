@@ -1,0 +1,10 @@
+package: terraform
+
+slices:
+  bins:
+    contents:
+      /usr/bin/terraform:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/terraform-*.spdx.json:

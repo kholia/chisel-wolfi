@@ -1,0 +1,14 @@
+package: pkgconf
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/bomtool:
+      /usr/bin/pkg-config:
+      /usr/bin/pkgconf:
+      /usr/lib/libpkgconf.so.7:
+      /usr/lib/libpkgconf.so.7.*:
+      /usr/share/doc/pkgconf/**:
+      /var/lib/db/sbom/pkgconf-*.spdx.json:

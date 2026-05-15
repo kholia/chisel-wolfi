@@ -1,0 +1,20 @@
+package: luajit
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libgcc_libs:
+    contents:
+      /usr/lib/libluajit-5.1.so.2:
+      /usr/lib/libluajit-5.1.so.2.*:
+
+  runtime:
+    essential:
+      luajit_libs:
+    contents:
+      /usr/share/luajit-2.1/jit/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/luajit-*.spdx.json:

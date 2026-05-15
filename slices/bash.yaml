@@ -1,0 +1,13 @@
+package: bash
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      ncurses_libs:
+    contents:
+      /usr/bin/bash:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/bash-*.spdx.json:

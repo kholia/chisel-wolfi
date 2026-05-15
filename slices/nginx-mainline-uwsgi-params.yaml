@@ -1,0 +1,11 @@
+package: nginx-mainline-uwsgi-params
+
+slices:
+  config:
+    contents:
+      /etc/nginx/uwsgi_params:
+      /etc/nginx/uwsgi_params.default:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-uwsgi-params-*.spdx.json:

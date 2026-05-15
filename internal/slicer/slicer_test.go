@@ -110,6 +110,56 @@ var slicerTests = []slicerTest{{
 		"/other-dir/file": "symlink ../dir/file {test-package_myslice}",
 	},
 }, {
+	summary: "APK installed database follows lib symlink",
+	arch:    "x86_64",
+	slices:  []setup.SliceKey{{"test-package", "bins"}},
+	pkgs: []*testutil.TestPackage{{
+		Name:          "test-package",
+		Version:       "1.0-r0",
+		Hash:          "hash",
+		Arch:          "x86_64",
+		APKChecksum:   "Q1apkchecksum",
+		Size:          12,
+		InstalledSize: 34,
+		Data: testutil.MustMakeAPK([]testutil.TarEntry{
+			testutil.Dir(0755, "./"),
+			testutil.Lnk(0777, "./lib", "usr/lib"),
+			testutil.Dir(0755, "./usr/"),
+			testutil.Dir(0755, "./usr/bin/"),
+			testutil.Reg(0755, "./usr/bin/tool", "tool"),
+		}, false),
+	}},
+	release: map[string]string{
+		"chisel.yaml": `
+			format: v1
+			maintenance:
+				standard: 2025-01-01
+				end-of-life: 2100-01-01
+			archives:
+				wolfi:
+					kind: apk
+					url: https://packages.wolfi.dev/os
+		`,
+		"slices/mydir/test-package.yaml": `
+			package: test-package
+			slices:
+				bins:
+					contents:
+						/lib:
+						/usr/bin/tool:
+		`,
+	},
+	filesystem: map[string]string{
+		"/lib":                      "symlink usr/lib",
+		"/usr/":                     "dir 0755",
+		"/usr/bin/":                 "dir 0755",
+		"/usr/bin/tool":             "file 0755 7c9bbe5e",
+		"/usr/lib/":                 "dir 0755",
+		"/usr/lib/apk/":             "dir 0755",
+		"/usr/lib/apk/db/":          "dir 0755",
+		"/usr/lib/apk/db/installed": "file 0644 001b15b6",
+	},
+}, {
 	summary: "Glob extraction",
 	slices:  []setup.SliceKey{{"test-package", "myslice"}},
 	release: map[string]string{
@@ -1806,7 +1856,7 @@ var slicerTests = []slicerTest{{
 						/**:
 		`,
 	},
-	error: `cannot extract from package "test-package": cannot create path /[a-z0-9\-\/]*/file outside of root /[a-z0-9\-\/]*`,
+	error: `cannot extract from package "test-package": cannot create path /[A-Za-z0-9_\-\/]*/file outside of root /[A-Za-z0-9_\-\/]*`,
 }, {
 	summary: "Extract conflicting paths with prefer from proper package",
 	slices: []setup.SliceKey{
@@ -2092,6 +2142,7 @@ func runSlicerTests(s *S, c *C, tests []slicerTest) {
 				archive := &testutil.TestArchive{
 					Opts: archive.Options{
 						Label:      setupArchive.Name,
+						Kind:       setupArchive.Kind,
 						Version:    setupArchive.Version,
 						Suites:     setupArchive.Suites,
 						Components: setupArchive.Components,

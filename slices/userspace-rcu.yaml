@@ -1,0 +1,25 @@
+package: userspace-rcu
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/liburcu-bp.so.8:
+      /usr/lib/liburcu-bp.so.8.*:
+      /usr/lib/liburcu-cds.so.8:
+      /usr/lib/liburcu-cds.so.8.*:
+      /usr/lib/liburcu-common.so.8:
+      /usr/lib/liburcu-common.so.8.*:
+      /usr/lib/liburcu-mb.so.8:
+      /usr/lib/liburcu-mb.so.8.*:
+      /usr/lib/liburcu-memb.so.8:
+      /usr/lib/liburcu-memb.so.8.*:
+      /usr/lib/liburcu-qsbr.so.8:
+      /usr/lib/liburcu-qsbr.so.8.*:
+      /usr/lib/liburcu.so.8:
+      /usr/lib/liburcu.so.8.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/userspace-rcu-*.spdx.json:

@@ -1,0 +1,16 @@
+package: strace
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libelf_libs:
+      libselinux_libs:
+      ncurses_libs:
+    contents:
+      /usr/bin/strace:
+      /usr/bin/strace-log-merge:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/strace-*.spdx.json:

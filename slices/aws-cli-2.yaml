@@ -1,0 +1,16 @@
+package: aws-cli-2
+
+slices:
+  bins:
+    essential:
+      ca-certificates-bundle_certs:
+      groff-base_bins:
+      python-3.14-base_runtime:
+    contents:
+      /usr/bin/aws:
+      /usr/bin/aws_completer:
+      /opt/chainguard/aws-cli-2/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/aws-cli-2-*.spdx.json:

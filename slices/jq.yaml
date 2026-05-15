@@ -1,0 +1,20 @@
+package: jq
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      oniguruma_libs:
+    contents:
+      /usr/lib/libjq.so.1:
+      /usr/lib/libjq.so.1.*:
+
+  bins:
+    essential:
+      jq_libs:
+    contents:
+      /usr/bin/jq:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/jq-*.spdx.json:

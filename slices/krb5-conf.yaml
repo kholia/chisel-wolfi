@@ -1,0 +1,12 @@
+package: krb5-conf
+
+slices:
+  config:
+    essential:
+      wolfi-baselayout_base:
+    contents:
+      /etc/krb5.conf:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/krb5-conf-*.spdx.json:

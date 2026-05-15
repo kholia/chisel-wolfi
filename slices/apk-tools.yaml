@@ -1,0 +1,22 @@
+package: apk-tools
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libapk.so.*:
+
+  bins:
+    essential:
+      apk-tools_libs:
+      ca-certificates-bundle_certs:
+    contents:
+      /usr/bin/apk:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/apk-tools-*.spdx.json:

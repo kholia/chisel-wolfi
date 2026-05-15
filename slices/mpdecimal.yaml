@@ -1,0 +1,16 @@
+package: mpdecimal
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libstdc++_libs:
+    contents:
+      /usr/lib/libmpdec++.so.4:
+      /usr/lib/libmpdec++.so.4.*:
+      /usr/lib/libmpdec.so.4:
+      /usr/lib/libmpdec.so.4.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/mpdecimal-*.spdx.json:

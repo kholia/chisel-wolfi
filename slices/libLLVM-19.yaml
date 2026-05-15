@@ -1,0 +1,18 @@
+package: libLLVM-19
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libffi_libs:
+      libgcc_libs:
+      libstdc++_libs:
+      libxml2-16_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libLLVM-19.so:
+      /usr/lib/libLLVM.so.19.1:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libLLVM-19-*.spdx.json:

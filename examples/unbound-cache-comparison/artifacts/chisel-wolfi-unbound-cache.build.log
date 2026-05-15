@@ -1,0 +1,87 @@
+#0 building with "colima" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.chisel-wolfi
+#1 transferring dockerfile: 1.78kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
+#3 resolve docker.io/docker/dockerfile:1@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89 done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 ...
+
+#5 [internal] load metadata for cgr.dev/chainguard/wolfi-base:latest
+#5 DONE 1.0s
+
+#4 [internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 DONE 1.5s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 126B done
+#6 DONE 0.0s
+
+#7 [chisel-build 1/8] FROM docker.io/library/golang:1.26-alpine@sha256:91eda9776261207ea25fd06b5b7fed8d397dd2c0a283e77f2ab6e91bfa71079d
+#7 resolve docker.io/library/golang:1.26-alpine@sha256:91eda9776261207ea25fd06b5b7fed8d397dd2c0a283e77f2ab6e91bfa71079d 0.0s done
+#7 DONE 0.0s
+
+#8 [builder 1/6] FROM cgr.dev/chainguard/wolfi-base:latest@sha256:441d6709305552a3411e585ad98aacb9dadda00c80f3267483c38ac6f86f49d4
+#8 resolve cgr.dev/chainguard/wolfi-base:latest@sha256:441d6709305552a3411e585ad98aacb9dadda00c80f3267483c38ac6f86f49d4 0.0s done
+#8 DONE 0.0s
+
+#9 [internal] load build context
+#9 transferring context: 17.26kB 0.0s done
+#9 DONE 0.0s
+
+#10 [chisel-build 2/8] WORKDIR /src
+#10 CACHED
+
+#11 [builder 4/6] COPY examples/wolfi-release/chisel.yaml /chisel-release/chisel.yaml
+#11 CACHED
+
+#12 [chisel-build 8/8] RUN CGO_ENABLED=0 GOOS=linux GOARCH="arm64"     go build -trimpath -ldflags="-s -w" -o /out/chisel ./cmd/chisel
+#12 CACHED
+
+#13 [chisel-build 5/8] COPY cmd ./cmd
+#13 CACHED
+
+#14 [builder 5/6] COPY slices /chisel-release/slices
+#14 CACHED
+
+#15 [chisel-build 7/8] COPY public ./public
+#15 CACHED
+
+#16 [chisel-build 4/8] RUN go mod download
+#16 CACHED
+
+#17 [builder 6/6] RUN test -n "wolfi-baselayout_base-library ca-certificates-bundle_certs bind-tools_bins unbound_bins unbound-config_config";     case "arm64" in         amd64) APK_ARCH=x86_64 ;;         arm64) APK_ARCH=aarch64 ;;         riscv64) APK_ARCH=riscv64 ;;         *) echo "unsupported TARGETARCH: arm64" >&2; exit 1 ;;     esac;     mkdir /staging-rootfs;     chisel cut --release /chisel-release --root /staging-rootfs --arch "${APK_ARCH}" wolfi-baselayout_base-library ca-certificates-bundle_certs bind-tools_bins unbound_bins unbound-config_config;     mkdir -p /staging-rootfs/var/lib/unbound;     chown 65532:65532 /staging-rootfs/var/lib/unbound;     test -x /staging-rootfs/usr/bin/unbound;     test -x /staging-rootfs/usr/bin/unbound-checkconf;     test -x /staging-rootfs/usr/bin/dig;     test -f /staging-rootfs/etc/unbound/unbound.conf;     test -f /staging-rootfs/etc/os-release;     test -f /staging-rootfs/lib/apk/db/installed
+#17 CACHED
+
+#18 [builder 2/6] RUN apk add --no-cache ca-certificates-bundle
+#18 CACHED
+
+#19 [chisel-build 6/8] COPY internal ./internal
+#19 CACHED
+
+#20 [builder 3/6] COPY --from=chisel-build /out/chisel /usr/local/bin/chisel
+#20 CACHED
+
+#21 [chisel-build 3/8] COPY go.mod go.sum ./
+#21 CACHED
+
+#22 [stage-2 1/1] COPY --from=builder /staging-rootfs /
+#22 CACHED
+
+#23 resolving provenance for metadata file
+#23 DONE 0.0s
+
+#24 exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035 done
+#24 exporting config sha256:dd66e1b44a1e99cc5efe42aff5931720146d85fcce54633f36a5ef5827c27a19 done
+#24 naming to docker.io/library/chisel-demo:chisel-wolfi-unbound-cache done
+#24 unpacking to docker.io/library/chisel-demo:chisel-wolfi-unbound-cache done
+#24 DONE 0.0s

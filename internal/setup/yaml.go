@@ -2,6 +2,7 @@ package setup
 
 import (
 	"bytes"
+	"crypto/rsa"
 	"errors"
 	"fmt"
 	"path"
@@ -14,10 +15,15 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/canonical/chisel/internal/apacheutil"
+	"github.com/canonical/chisel/internal/apk"
 	"github.com/canonical/chisel/internal/archive"
-	"github.com/canonical/chisel/internal/deb"
 	"github.com/canonical/chisel/internal/pgputil"
 )
+
+type decodedPubKey struct {
+	pgp *packet.PublicKey
+	rsa *rsa.PublicKey
+}
 
 func (p *Package) MarshalYAML() (any, error) {
 	return packageToYAML(p)
@@ -43,13 +49,15 @@ const (
 )
 
 type yamlArchive struct {
-	Version    string   `yaml:"version"`
-	Suites     []string `yaml:"suites"`
-	Components []string `yaml:"components"`
-	Priority   *int     `yaml:"priority"`
-	Pro        string   `yaml:"pro"`
-	Default    bool     `yaml:"default"`
-	PubKeys    []string `yaml:"public-keys"`
+	Kind       archive.Kind `yaml:"kind,omitempty"`
+	URL        string       `yaml:"url,omitempty"`
+	Version    string       `yaml:"version"`
+	Suites     []string     `yaml:"suites"`
+	Components []string     `yaml:"components"`
+	Priority   *int         `yaml:"priority"`
+	Pro        string       `yaml:"pro"`
+	Default    bool         `yaml:"default"`
+	PubKeys    []string     `yaml:"public-keys"`
 }
 
 type yamlPackage struct {
@@ -268,16 +276,31 @@ func parseRelease(baseDir, filePath string, data []byte) (*Release, error) {
 	}
 
 	// Decode the public keys and match against provided IDs.
-	pubKeys := make(map[string]*packet.PublicKey, len(yamlVar.PubKeys))
+	pubKeys := make(map[string]decodedPubKey, len(yamlVar.PubKeys))
 	for keyName, yamlPubKey := range yamlVar.PubKeys {
-		key, err := pgputil.DecodePubKey([]byte(yamlPubKey.Armor))
-		if err != nil {
+		pgpKey, err := pgputil.DecodePubKey([]byte(yamlPubKey.Armor))
+		if err == nil {
+			if yamlPubKey.ID != pgpKey.KeyIdString() {
+				return nil, fmt.Errorf("%s: public key %q armor has incorrect ID: expected %q, got %q", fileName, keyName, yamlPubKey.ID, pgpKey.KeyIdString())
+			}
+			pubKeys[keyName] = decodedPubKey{pgp: pgpKey}
+			continue
+		}
+
+		rsaKey, rsaErr := apk.DecodeRSAPublicKey([]byte(yamlPubKey.Armor))
+		if rsaErr != nil {
 			return nil, fmt.Errorf("%s: cannot decode public key %q: %w", fileName, keyName, err)
 		}
-		if yamlPubKey.ID != key.KeyIdString() {
-			return nil, fmt.Errorf("%s: public key %q armor has incorrect ID: expected %q, got %q", fileName, keyName, yamlPubKey.ID, key.KeyIdString())
+		if yamlPubKey.ID != "" {
+			keyID, err := apk.RSAPublicKeyID(rsaKey)
+			if err != nil {
+				return nil, fmt.Errorf("%s: cannot identify public key %q: %w", fileName, keyName, err)
+			}
+			if yamlPubKey.ID != keyID {
+				return nil, fmt.Errorf("%s: public key %q armor has incorrect ID: expected %q, got %q", fileName, keyName, yamlPubKey.ID, keyID)
+			}
 		}
-		pubKeys[keyName] = key
+		pubKeys[keyName] = decodedPubKey{rsa: rsaKey}
 	}
 
 	// Merge all archive definitions.
@@ -298,17 +321,31 @@ func parseRelease(baseDir, filePath string, data []byte) (*Release, error) {
 	var defaultArchive string
 	var archiveNoPriority string
 	for archiveName, details := range yamlArchives {
+		switch details.Kind {
+		case "", archive.KindDeb, archive.KindAPK:
+		default:
+			return nil, fmt.Errorf("%s: archive %q has invalid kind %q", fileName, archiveName, details.Kind)
+		}
 		if yamlVar.Format != "v1" && details.Default {
 			return nil, fmt.Errorf("%s: archive %q has 'default' field which is obsolete since format v2", fileName, archiveName)
 		}
-		if details.Version == "" {
-			return nil, fmt.Errorf("%s: archive %q missing version field", fileName, archiveName)
-		}
-		if len(details.Suites) == 0 {
-			return nil, fmt.Errorf("%s: archive %q missing suites field", fileName, archiveName)
-		}
-		if len(details.Components) == 0 {
-			return nil, fmt.Errorf("%s: archive %q missing components field", fileName, archiveName)
+		if details.Kind == archive.KindAPK {
+			if details.URL == "" {
+				return nil, fmt.Errorf("%s: archive %q missing url field", fileName, archiveName)
+			}
+		} else {
+			if details.Version == "" {
+				return nil, fmt.Errorf("%s: archive %q missing version field", fileName, archiveName)
+			}
+			if len(details.Suites) == 0 {
+				return nil, fmt.Errorf("%s: archive %q missing suites field", fileName, archiveName)
+			}
+			if len(details.Components) == 0 {
+				return nil, fmt.Errorf("%s: archive %q missing components field", fileName, archiveName)
+			}
+			if len(details.PubKeys) == 0 {
+				return nil, fmt.Errorf("%s: archive %q missing public-keys field", fileName, archiveName)
+			}
 		}
 
 		switch details.Pro {
@@ -328,16 +365,24 @@ func parseRelease(baseDir, filePath string, data []byte) (*Release, error) {
 			defaultArchive = archiveName
 		}
 
-		if len(details.PubKeys) == 0 {
-			return nil, fmt.Errorf("%s: archive %q missing public-keys field", fileName, archiveName)
-		}
 		var archiveKeys []*packet.PublicKey
+		var archiveRSAKeys []*rsa.PublicKey
 		for _, keyName := range details.PubKeys {
 			key, ok := pubKeys[keyName]
 			if !ok {
 				return nil, fmt.Errorf("%s: archive %q refers to undefined public key %q", fileName, archiveName, keyName)
 			}
-			archiveKeys = append(archiveKeys, key)
+			if details.Kind == archive.KindAPK {
+				if key.rsa == nil {
+					return nil, fmt.Errorf("%s: archive %q public key %q is not an RSA public key", fileName, archiveName, keyName)
+				}
+				archiveRSAKeys = append(archiveRSAKeys, key.rsa)
+			} else {
+				if key.pgp == nil {
+					return nil, fmt.Errorf("%s: archive %q public key %q is not an OpenPGP public key", fileName, archiveName, keyName)
+				}
+				archiveKeys = append(archiveKeys, key.pgp)
+			}
 		}
 
 		priority := 0
@@ -356,12 +401,15 @@ func parseRelease(baseDir, filePath string, data []byte) (*Release, error) {
 
 		release.Archives[archiveName] = &Archive{
 			Name:       archiveName,
+			Kind:       details.Kind,
+			URL:        details.URL,
 			Version:    details.Version,
 			Suites:     details.Suites,
 			Components: details.Components,
 			Pro:        details.Pro,
 			Priority:   priority,
 			PubKeys:    archiveKeys,
+			RSAPubKeys: archiveRSAKeys,
 		}
 	}
 	if (hasPriority && archiveNoPriority != "") ||
@@ -581,7 +629,7 @@ func parsePackage(format, pkgName, pkgPath string, data []byte) (*Package, error
 				}
 				arch = yamlPath.Arch.List
 				for _, s := range arch {
-					if deb.ValidateArch(s) != nil {
+					if validateKnownArch(s) != nil {
 						return nil, fmt.Errorf("slice %s_%s has invalid 'arch' for path %s: %q", pkgName, sliceName, contPath, s)
 					}
 				}

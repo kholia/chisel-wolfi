@@ -1,0 +1,13 @@
+package: py3.13-semver-bin
+
+slices:
+  bins:
+    essential:
+      py3.13-semver_libs:
+      python-3.13-base_runtime:
+    contents:
+      /usr/bin/pysemver:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/py3.13-semver-bin-*.spdx.json:

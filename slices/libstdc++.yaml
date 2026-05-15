@@ -1,0 +1,14 @@
+package: libstdc++
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libgcc_libs:
+    contents:
+      /usr/lib/libstdc++.so.6:
+      /usr/lib/libstdc++.so.6.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libstdc++-16*.spdx.json:

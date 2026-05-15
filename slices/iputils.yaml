@@ -1,0 +1,23 @@
+package: iputils
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libcap_libs:
+      libxcrypt_libs:
+    contents:
+      /usr/bin/arping:
+      /usr/bin/clockdiff:
+      /usr/bin/ping:
+      /usr/bin/ping6:
+      /usr/bin/tracepath:
+      /usr/bin/tracepath6:
+      /usr/local/bin/arping:
+      /usr/local/bin/clockdiff:
+      /usr/local/bin/ping:
+      /usr/local/bin/tracepath:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/iputils-*.spdx.json:

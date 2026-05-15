@@ -1,0 +1,13 @@
+package: c-ares
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libcares.so.2:
+      /usr/lib/libcares.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/c-ares-*.spdx.json:

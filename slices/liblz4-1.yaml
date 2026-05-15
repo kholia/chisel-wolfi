@@ -1,0 +1,13 @@
+package: liblz4-1
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/liblz4.so.1:
+      /usr/lib/liblz4.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/liblz4-1-*.spdx.json:

@@ -1,0 +1,12 @@
+package: ecpg-18
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/ecpg:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ecpg-18-*.spdx.json:

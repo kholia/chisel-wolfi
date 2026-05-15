@@ -1,0 +1,22 @@
+package: openssh-client
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libedit_libs:
+      libselinux_libs:
+      zlib_libs:
+    contents:
+      /etc/ssh/moduli:
+      /etc/ssh/ssh_config:
+      /usr/bin/scp:
+      /usr/bin/sftp:
+      /usr/bin/ssh:
+      /usr/bin/ssh-add:
+      /usr/bin/ssh-agent:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openssh-client-*.spdx.json:

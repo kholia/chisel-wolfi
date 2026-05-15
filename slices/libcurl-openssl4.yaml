@@ -1,0 +1,23 @@
+package: libcurl-openssl4
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      krb5-libs_libs:
+      libbrotlidec1_libs:
+      libcrypto3_libs:
+      libldap_libs:
+      libnghttp2-14_libs:
+      libpsl_libs:
+      libssl3_libs:
+      nghttp3_libs:
+      ngtcp2_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libcurl.so.4:
+      /usr/lib/libcurl.so.4.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libcurl-openssl4-*.spdx.json:

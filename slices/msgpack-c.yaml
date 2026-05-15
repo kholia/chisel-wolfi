@@ -1,0 +1,13 @@
+package: msgpack-c
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libmsgpack-c.so.2:
+      /usr/lib/libmsgpack-c.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/msgpack-c-*.spdx.json:

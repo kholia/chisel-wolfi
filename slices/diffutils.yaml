@@ -1,0 +1,15 @@
+package: diffutils
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/cmp:
+      /usr/bin/diff:
+      /usr/bin/diff3:
+      /usr/bin/sdiff:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/diffutils-*.spdx.json:

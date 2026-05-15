@@ -1,0 +1,16 @@
+package: wget
+
+slices:
+  bins:
+    essential:
+      ca-certificates-bundle_certs:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /etc/wgetrc:
+      /usr/bin/wget:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/wget-*.spdx.json:

@@ -1,0 +1,14 @@
+package: libtirpc
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      krb5-libs_libs:
+    contents:
+      /usr/lib/libtirpc.so.3:
+      /usr/lib/libtirpc.so.3.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libtirpc-*.spdx.json:

@@ -1,0 +1,13 @@
+package: libmnl
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libmnl.so.0:
+      /usr/lib/libmnl.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libmnl-*.spdx.json:

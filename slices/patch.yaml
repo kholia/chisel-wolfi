@@ -1,0 +1,12 @@
+package: patch
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/patch:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/patch-*.spdx.json:

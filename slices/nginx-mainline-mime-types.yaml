@@ -1,0 +1,11 @@
+package: nginx-mainline-mime-types
+
+slices:
+  config:
+    contents:
+      /etc/nginx/mime.types:
+      /etc/nginx/mime.types.default:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-mime-types-*.spdx.json:

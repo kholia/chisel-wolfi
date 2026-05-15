@@ -1,0 +1,14 @@
+package: pnpm
+
+slices:
+  bins:
+    essential:
+      nodejs-24_bins:
+    contents:
+      /usr/bin/pnpm:
+      /usr/bin/pnpx:
+      /usr/lib/node_modules/pnpm/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/pnpm-*.spdx.json:

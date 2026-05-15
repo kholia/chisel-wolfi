@@ -1,6 +1,7 @@
 package setup
 
 import (
+	"crypto/rsa"
 	"errors"
 	"fmt"
 	"os"
@@ -12,6 +13,8 @@ import (
 	"golang.org/x/crypto/openpgp/packet"
 
 	"github.com/canonical/chisel/internal/apacheutil"
+	"github.com/canonical/chisel/internal/apk"
+	"github.com/canonical/chisel/internal/archive"
 	"github.com/canonical/chisel/internal/deb"
 	"github.com/canonical/chisel/internal/strdist"
 )
@@ -36,12 +39,15 @@ type Maintenance struct {
 // Archive is the location from which binary packages are obtained.
 type Archive struct {
 	Name       string
+	Kind       archive.Kind
+	URL        string
 	Version    string
 	Suites     []string
 	Components []string
 	Priority   int
 	Pro        string
 	PubKeys    []*packet.PublicKey
+	RSAPubKeys []*rsa.PublicKey
 	// Maintained is set when the archive is still being updated.
 	Maintained bool
 	// OldRelease is set for Ubuntu releases which are moved from the regular
@@ -392,7 +398,7 @@ func order(pkgs map[string]*Package, keys []SliceKey, arch string) ([]SliceKey, 
 			return nil, fmt.Errorf("essential loop detected: %s", strings.Join(names, ", "))
 		}
 		name := names[0]
-		dot := strings.IndexByte(name, '_')
+		dot := strings.LastIndexByte(name, '_')
 		order = append(order, SliceKey{name[:dot], name[dot+1:]})
 	}
 
@@ -470,9 +476,9 @@ func Select(release *Release, slices []SliceKey, arch string) (*Selection, error
 
 	var err error
 	if arch == "" {
-		arch, err = deb.InferArch()
+		arch, err = inferArch(release)
 	} else {
-		err = deb.ValidateArch(arch)
+		err = validateArch(release, arch)
 	}
 	if err != nil {
 		return nil, err
@@ -505,6 +511,55 @@ func Select(release *Release, slices []SliceKey, arch string) (*Selection, error
 	}
 
 	return selection, nil
+}
+
+func inferArch(release *Release) (string, error) {
+	if release == nil {
+		return deb.InferArch()
+	}
+	var debArchive, apkArchive bool
+	for _, archiveInfo := range release.Archives {
+		switch archiveInfo.Kind {
+		case "", archive.KindDeb:
+			debArchive = true
+		case archive.KindAPK:
+			apkArchive = true
+		}
+	}
+	switch {
+	case apkArchive && !debArchive:
+		return apk.InferArch()
+	default:
+		return deb.InferArch()
+	}
+}
+
+func validateArch(release *Release, arch string) error {
+	if release == nil {
+		return validateKnownArch(arch)
+	}
+	for _, archiveInfo := range release.Archives {
+		switch archiveInfo.Kind {
+		case "", archive.KindDeb:
+			if err := deb.ValidateArch(arch); err != nil {
+				return err
+			}
+		case archive.KindAPK:
+			if err := apk.ValidateArch(arch); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf("invalid archive kind: %q", archiveInfo.Kind)
+		}
+	}
+	return nil
+}
+
+func validateKnownArch(arch string) error {
+	if deb.ValidateArch(arch) == nil || apk.ValidateArch(arch) == nil {
+		return nil
+	}
+	return fmt.Errorf("invalid package architecture: %s", arch)
 }
 
 const (

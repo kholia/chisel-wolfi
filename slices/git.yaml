@@ -1,0 +1,25 @@
+package: git
+
+slices:
+  bins:
+    essential:
+      ca-certificates-bundle_certs:
+      glibc_runtime:
+      busybox_shell:
+      libcurl-openssl4_libs:
+      libexpat1_libs:
+      libpcre2-8-0_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/git:
+      /usr/bin/git-cvsserver:
+      /usr/bin/git-receive-pack:
+      /usr/bin/git-upload-archive:
+      /usr/bin/git-upload-pack:
+      /usr/bin/scalar:
+      /usr/libexec/git-core/**:
+      /usr/share/git-core/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/git-*.spdx.json:

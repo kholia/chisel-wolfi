@@ -1,0 +1,13 @@
+package: helm
+
+slices:
+  bins:
+    essential:
+      ca-certificates-bundle_certs:
+      glibc_runtime:
+    contents:
+      /usr/bin/helm:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/helm-*.spdx.json:

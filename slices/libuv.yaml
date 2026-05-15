@@ -1,0 +1,13 @@
+package: libuv
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libuv.so.1:
+      /usr/lib/libuv.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libuv-*.spdx.json:

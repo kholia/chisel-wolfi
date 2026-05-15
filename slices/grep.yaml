@@ -1,0 +1,15 @@
+package: grep
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libpcre2-8-0_libs:
+    contents:
+      /usr/bin/egrep:
+      /usr/bin/fgrep:
+      /usr/bin/grep:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/grep-*.spdx.json:

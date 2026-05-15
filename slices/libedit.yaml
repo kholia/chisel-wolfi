@@ -1,0 +1,14 @@
+package: libedit
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      ncurses_libs:
+    contents:
+      /usr/lib/libedit.so.0:
+      /usr/lib/libedit.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libedit-*.spdx.json:

@@ -1,0 +1,19 @@
+package: nginx-mainline-config
+
+slices:
+  config:
+    essential:
+      nginx-mainline-fastcgi-params_config:
+      nginx-mainline-mime-types_config:
+      nginx-mainline-scgi-params_config:
+      nginx-mainline-uwsgi-params_config:
+    contents:
+      /etc/nginx/koi-utf:
+      /etc/nginx/koi-win:
+      /etc/nginx/nginx.conf:
+      /etc/nginx/nginx.conf.default:
+      /etc/nginx/win-utf:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nginx-mainline-config-*.spdx.json:

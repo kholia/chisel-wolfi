@@ -1,0 +1,19 @@
+package: pcre2
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libedit_libs:
+      libpcre2-16-0_libs:
+      libpcre2-32-0_libs:
+      libpcre2-8-0_libs:
+      libpcre2-posix-3_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/pcre2grep:
+      /usr/bin/pcre2test:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/pcre2-*.spdx.json:

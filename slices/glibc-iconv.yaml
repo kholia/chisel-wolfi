@@ -1,0 +1,14 @@
+package: glibc-iconv
+
+slices:
+  data:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/iconv:
+      /usr/bin/iconvconfig:
+      /usr/lib/gconv/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/glibc-iconv-*.spdx.json:

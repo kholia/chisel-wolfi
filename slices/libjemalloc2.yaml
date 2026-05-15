@@ -1,0 +1,14 @@
+package: libjemalloc2
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libgcc_libs:
+      libstdc++_libs:
+    contents:
+      /usr/lib/libjemalloc.so.2:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libjemalloc2-*.spdx.json:

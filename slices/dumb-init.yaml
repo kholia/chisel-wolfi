@@ -1,0 +1,10 @@
+package: dumb-init
+
+slices:
+  bins:
+    contents:
+      /usr/bin/dumb-init:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/dumb-init-*.spdx.json:

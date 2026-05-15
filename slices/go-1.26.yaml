@@ -1,0 +1,14 @@
+package: go-1.26
+
+slices:
+  bins:
+    essential:
+      bash_bins:
+    contents:
+      /usr/bin/go:
+      /usr/bin/gofmt:
+      /usr/lib/go/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/go-1.26-*.spdx.json:

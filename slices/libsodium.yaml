@@ -1,0 +1,13 @@
+package: libsodium
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libsodium.so.26:
+      /usr/lib/libsodium.so.26.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libsodium-*.spdx.json:

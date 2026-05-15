@@ -10,6 +10,7 @@ import (
 	. "gopkg.in/check.v1"
 	"gopkg.in/yaml.v3"
 
+	"github.com/canonical/chisel/internal/archive"
 	"github.com/canonical/chisel/internal/deb"
 	"github.com/canonical/chisel/internal/setup"
 	"github.com/canonical/chisel/internal/testutil"
@@ -87,6 +88,45 @@ var setupTests = []setupTest{{
 				Suites:     []string{"jammy", "jammy-security"},
 				Components: []string{"main", "other"},
 				PubKeys:    []*packet.PublicKey{testKey.PubKey},
+				Maintained: true,
+			},
+		},
+		Packages: map[string]*setup.Package{
+			"mypkg": {
+				Name:   "mypkg",
+				Path:   "slices/mydir/mypkg.yaml",
+				Slices: map[string]*setup.Slice{},
+			},
+		},
+		Maintenance: &setup.Maintenance{
+			Standard:  time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC),
+			EndOfLife: time.Date(2100, time.January, 1, 0, 0, 0, 0, time.UTC),
+		},
+	},
+}, {
+	summary: "APK archive",
+	input: map[string]string{
+		"chisel.yaml": `
+			format: v3
+			maintenance:
+				standard: 2025-01-01
+				end-of-life: 2100-01-01
+			archives:
+				wolfi:
+					kind: apk
+					url: https://packages.wolfi.dev/os
+		`,
+		"slices/mydir/mypkg.yaml": `
+			package: mypkg
+		`,
+	},
+	release: &setup.Release{
+		Format: "v3",
+		Archives: map[string]*setup.Archive{
+			"wolfi": {
+				Name:       "wolfi",
+				Kind:       archive.KindAPK,
+				URL:        "https://packages.wolfi.dev/os",
 				Maintained: true,
 			},
 		},

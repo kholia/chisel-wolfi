@@ -1,0 +1,10 @@
+package: giflib
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libgif.so.7:
+      /usr/lib/libgif.so.7.*:
+      /var/lib/db/sbom/giflib-*.spdx.json:

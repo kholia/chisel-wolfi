@@ -1,0 +1,42 @@
+package: glibc
+
+slices:
+  libs:
+    contents:
+      /etc/rpc:
+      /usr/lib/libBrokenLocale.so.1:
+      /usr/lib/libanl.so.1:
+      /usr/lib/libc.so.6:
+      /usr/lib/libc_malloc_debug.so.0:
+      /usr/lib/libdl.so.2:
+      /usr/lib/libm.so.6:
+      /usr/lib/libmemusage.so:
+      /usr/lib/libmvec.so.1:
+      /usr/lib/libnsl.so.1:
+      /usr/lib/libnss_compat.so.2:
+      /usr/lib/libnss_dns.so.2:
+      /usr/lib/libnss_files.so.2:
+      /usr/lib/libpthread.so.0:
+      /usr/lib/libresolv.so.2:
+      /usr/lib/librt.so.1:
+      /usr/lib/libthread_db.so.1:
+      /usr/lib/libutil.so.1:
+
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/ld.so:
+      /usr/bin/ldconfig:
+      /etc/apk/commit_hooks.d/ldconfig-commit.sh:
+
+  runtime:
+    essential:
+      wolfi-baselayout_layout:
+      ld-linux_libs:
+      libgcc_libs:
+      glibc_libs:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/glibc-[0-9]*.spdx.json:

@@ -1,0 +1,32 @@
+package: iptables
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libmnl_libs:
+      libnftnl_libs:
+    contents:
+      /etc/ethertypes:
+      /usr/lib/libip4tc.so.2:
+      /usr/lib/libip4tc.so.2.*:
+      /usr/lib/libip6tc.so.2:
+      /usr/lib/libip6tc.so.2.*:
+      /usr/lib/libipq.so.0:
+      /usr/lib/libipq.so.0.*:
+      /usr/lib/libxtables.so.12:
+      /usr/lib/libxtables.so.12.*:
+      /usr/lib/xtables/**:
+
+  bins:
+    essential:
+      iptables_libs:
+    contents:
+      /etc/conf.d/ebtables:
+      /etc/conf.d/iptables:
+      /usr/bin/*tables*:
+      /usr/bin/xtables-*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/iptables-*.spdx.json:

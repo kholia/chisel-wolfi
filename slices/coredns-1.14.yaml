@@ -1,0 +1,12 @@
+package: coredns-1.14
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/coredns:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/coredns-1.14-*.spdx.json:

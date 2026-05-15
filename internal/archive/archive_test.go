@@ -1,6 +1,10 @@
 package archive_test
 
 import (
+	"bytes"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
 	"golang.org/x/crypto/openpgp/packet"
 	. "gopkg.in/check.v1"
 
@@ -16,6 +20,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/canonical/chisel/internal/apk"
 	"github.com/canonical/chisel/internal/archive"
 	"github.com/canonical/chisel/internal/archive/testarchive"
 	"github.com/canonical/chisel/internal/deb"
@@ -35,6 +40,7 @@ type httpSuite struct {
 	restore   func()
 	privKey   *packet.PrivateKey
 	pubKey    *packet.PublicKey
+	rsaKey    *rsa.PrivateKey
 }
 
 var _ = Suite(&httpSuite{})
@@ -46,7 +52,17 @@ var (
 	keyUbuntuFIPSv1 = testutil.PGPKeys["key-ubuntu-fips-v1"]
 	keyUbuntuApps   = testutil.PGPKeys["key-ubuntu-apps"]
 	keyUbuntuESMv2  = testutil.PGPKeys["key-ubuntu-esm-v2"]
+	testRSAKey      = mustGenerateRSAKey()
+	otherRSAKey     = mustGenerateRSAKey()
 )
+
+func mustGenerateRSAKey() *rsa.PrivateKey {
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		panic(err)
+	}
+	return key
+}
 
 func (s *httpSuite) SetUpTest(c *C) {
 	s.logf = c.Logf
@@ -61,6 +77,7 @@ func (s *httpSuite) SetUpTest(c *C) {
 	s.restore = archive.FakeDo(s.Do)
 	s.privKey = key1.PrivKey
 	s.pubKey = key1.PubKey
+	s.rsaKey = testRSAKey
 }
 
 func (s *httpSuite) TearDownTest(c *C) {
@@ -250,6 +267,129 @@ func (s *httpSuite) TestFetchPackage(c *C) {
 		SHA256:  "54af70097b30b33cfcbb6911ad3d0df86c2d458928169e348fa7873e4fc678e4",
 	})
 	c.Assert(read(pkg), Equals, "mypkg4 1.4 data")
+}
+
+func (s *httpSuite) TestFetchAPKPackage(c *C) {
+	s.base = "https://packages.wolfi.dev/os/"
+
+	pkgData := testutil.MustMakeSignedAPK([]testutil.TarEntry{
+		testutil.Dir(0755, "usr/"),
+		testutil.Reg(0644, "usr/file", "wolfi data"),
+	}, s.rsaKey, "test.rsa.pub")
+	checksum, err := apk.ControlChecksum(bytes.NewReader(pkgData))
+	c.Assert(err, IsNil)
+	pkgDigest := fmt.Sprintf("%x", sha256.Sum256(pkgData))
+	index := fmt.Sprintf("C:%s\nP:mypkg\nV:1.0-r0\nA:x86_64\nS:%d\nI:12\nT:Test package\n\n", checksum, len(pkgData))
+	s.responses["/os/x86_64/APKINDEX.tar.gz"] = testutil.MustMakeSignedAPKIndex(index, s.rsaKey, "test.rsa.pub")
+	s.responses["/os/x86_64/mypkg-1.0-r0.apk"] = pkgData
+
+	options := archive.Options{
+		Label:      "wolfi",
+		Kind:       archive.KindAPK,
+		URL:        "https://packages.wolfi.dev/os",
+		Arch:       "x86_64",
+		CacheDir:   c.MkDir(),
+		RSAPubKeys: []*rsa.PublicKey{&s.rsaKey.PublicKey},
+	}
+
+	testArchive, err := archive.Open(&options)
+	c.Assert(err, IsNil)
+	c.Assert(testArchive.Options().Kind, Equals, archive.KindAPK)
+
+	pkg, info, err := testArchive.Fetch("mypkg")
+	c.Assert(err, IsNil)
+	c.Assert(info, DeepEquals, &archive.PackageInfo{
+		Name:          "mypkg",
+		Version:       "1.0-r0",
+		Arch:          "x86_64",
+		SHA256:        pkgDigest,
+		Kind:          archive.KindAPK,
+		APKChecksum:   checksum,
+		Size:          int64(len(pkgData)),
+		InstalledSize: 12,
+	})
+	defer pkg.Close()
+	data, err := io.ReadAll(pkg)
+	c.Assert(err, IsNil)
+	c.Assert(data, DeepEquals, pkgData)
+}
+
+func (s *httpSuite) TestFetchAPKPackageWithoutPackageSignature(c *C) {
+	s.base = "https://packages.wolfi.dev/os/"
+
+	pkgData := testutil.MustMakeAPK([]testutil.TarEntry{
+		testutil.Reg(0644, "usr/file", "wolfi data"),
+	}, false)
+	checksum, err := apk.ControlChecksum(bytes.NewReader(pkgData))
+	c.Assert(err, IsNil)
+	index := fmt.Sprintf("C:%s\nP:mypkg\nV:1.0-r0\nA:x86_64\nS:%d\nI:12\nT:Test package\n\n", checksum, len(pkgData))
+	s.responses["/os/x86_64/APKINDEX.tar.gz"] = testutil.MustMakeSignedAPKIndex(index, s.rsaKey, "test.rsa.pub")
+	s.responses["/os/x86_64/mypkg-1.0-r0.apk"] = pkgData
+
+	options := archive.Options{
+		Label:      "wolfi",
+		Kind:       archive.KindAPK,
+		URL:        "https://packages.wolfi.dev/os",
+		Arch:       "x86_64",
+		CacheDir:   c.MkDir(),
+		RSAPubKeys: []*rsa.PublicKey{&s.rsaKey.PublicKey},
+	}
+
+	testArchive, err := archive.Open(&options)
+	c.Assert(err, IsNil)
+	pkg, _, err := testArchive.Fetch("mypkg")
+	c.Assert(err, IsNil)
+	defer pkg.Close()
+	data, err := io.ReadAll(pkg)
+	c.Assert(err, IsNil)
+	c.Assert(data, DeepEquals, pkgData)
+}
+
+func (s *httpSuite) TestOpenAPKVerifiesIndexSignature(c *C) {
+	s.base = "https://packages.wolfi.dev/os/"
+
+	index := "P:mypkg\nV:1.0-r0\nA:x86_64\nS:0\nI:0\nT:Test package\n\n"
+	s.responses["/os/x86_64/APKINDEX.tar.gz"] = testutil.MustMakeAPKIndex(index, false)
+
+	options := archive.Options{
+		Label:      "wolfi",
+		Kind:       archive.KindAPK,
+		URL:        "https://packages.wolfi.dev/os",
+		Arch:       "x86_64",
+		CacheDir:   c.MkDir(),
+		RSAPubKeys: []*rsa.PublicKey{&s.rsaKey.PublicKey},
+	}
+
+	_, err := archive.Open(&options)
+	c.Assert(err, ErrorMatches, `cannot verify APKINDEX signature: missing APK RSA signature`)
+}
+
+func (s *httpSuite) TestFetchAPKPackageVerifiesSignature(c *C) {
+	s.base = "https://packages.wolfi.dev/os/"
+
+	pkgData := testutil.MustMakeSignedAPK([]testutil.TarEntry{
+		testutil.Reg(0644, "usr/file", "wolfi data"),
+	}, otherRSAKey, "test.rsa.pub")
+	checksum, err := apk.ControlChecksum(bytes.NewReader(pkgData))
+	c.Assert(err, IsNil)
+	index := fmt.Sprintf("C:%s\nP:mypkg\nV:1.0-r0\nA:x86_64\nS:%d\nI:12\nT:Test package\n\n", checksum, len(pkgData))
+	s.responses["/os/x86_64/APKINDEX.tar.gz"] = testutil.MustMakeSignedAPKIndex(index, s.rsaKey, "test.rsa.pub")
+	s.responses["/os/x86_64/mypkg-1.0-r0.apk"] = pkgData
+
+	options := archive.Options{
+		Label:      "wolfi",
+		Kind:       archive.KindAPK,
+		URL:        "https://packages.wolfi.dev/os",
+		Arch:       "x86_64",
+		CacheDir:   c.MkDir(),
+		RSAPubKeys: []*rsa.PublicKey{&s.rsaKey.PublicKey},
+	}
+
+	testArchive, err := archive.Open(&options)
+	c.Assert(err, IsNil)
+	pkg, _, err := testArchive.Fetch("mypkg")
+	c.Assert(err, ErrorMatches, `cannot verify package signature: cannot verify APK RSA signature ".SIGN.RSA256.test.rsa.pub"`)
+	c.Assert(pkg, IsNil)
 }
 
 func (s *httpSuite) TestFetchPortsPackage(c *C) {

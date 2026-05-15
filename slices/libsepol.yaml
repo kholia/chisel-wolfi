@@ -1,0 +1,23 @@
+package: libsepol
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libsepol.so.2:
+
+  bins:
+    essential:
+      libsepol_libs:
+    contents:
+      /usr/bin/chkcon:
+      /usr/bin/sepol_check_access:
+      /usr/bin/sepol_compute_av:
+      /usr/bin/sepol_compute_member:
+      /usr/bin/sepol_compute_relabel:
+      /usr/bin/sepol_validate_transition:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libsepol-*.spdx.json:

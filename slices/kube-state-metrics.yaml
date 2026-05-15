@@ -1,0 +1,12 @@
+package: kube-state-metrics
+
+slices:
+  bins:
+    essential:
+      tzdata_zoneinfo:
+    contents:
+      /usr/bin/kube-state-metrics:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/kube-state-metrics-*.spdx.json:

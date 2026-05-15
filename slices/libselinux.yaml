@@ -1,0 +1,40 @@
+package: libselinux
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libpcre2-8-0_libs:
+      libsepol_libs:
+    contents:
+      /usr/lib/libselinux.so.1:
+
+  bins:
+    essential:
+      libselinux_libs:
+    contents:
+      /usr/bin/avcstat:
+      /usr/bin/compute_av:
+      /usr/bin/compute_create:
+      /usr/bin/compute_member:
+      /usr/bin/compute_relabel:
+      /usr/bin/getconlist:
+      /usr/bin/getdefaultcon:
+      /usr/bin/getenforce:
+      /usr/bin/getfilecon:
+      /usr/bin/getpidcon:
+      /usr/bin/getpidprevcon:
+      /usr/bin/getpolicyload:
+      /usr/bin/getsebool:
+      /usr/bin/getseuser:
+      /usr/bin/matchpathcon:
+      /usr/bin/policyvers:
+      /usr/bin/sefcontext_compile:
+      /usr/bin/selinux_check_access:
+      /usr/bin/selinuxenabled:
+      /usr/bin/setenforce:
+      /usr/bin/setfilecon:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libselinux-*.spdx.json:

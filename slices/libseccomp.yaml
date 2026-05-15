@@ -1,0 +1,19 @@
+package: libseccomp
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libseccomp.so.2:
+      /usr/lib/libseccomp.so.2.*:
+
+  bins:
+    essential:
+      libseccomp_libs:
+    contents:
+      /usr/bin/scmp_sys_resolver:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libseccomp-*.spdx.json:

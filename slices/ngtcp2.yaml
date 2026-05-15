@@ -1,0 +1,17 @@
+package: ngtcp2
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /usr/lib/libngtcp2.so.16:
+      /usr/lib/libngtcp2.so.16.*:
+      /usr/lib/libngtcp2_crypto_ossl.so.0:
+      /usr/lib/libngtcp2_crypto_ossl.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ngtcp2-*.spdx.json:

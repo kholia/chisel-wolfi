@@ -1,0 +1,14 @@
+package: py3.13-pip-base
+
+slices:
+  libs:
+    essential:
+      python-3.13-base_runtime:
+    contents:
+      /usr/bin/pip3.13:
+      /usr/lib/python3.13/site-packages/pip/**:
+      /usr/lib/python3.13/site-packages/pip-*.dist-info/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/py3.13-pip-base-*.spdx.json:

@@ -1,0 +1,12 @@
+package: make
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/make:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/make-*.spdx.json:

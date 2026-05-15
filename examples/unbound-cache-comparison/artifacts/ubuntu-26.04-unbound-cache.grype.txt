@@ -1,0 +1,12 @@
+NAME    INSTALLED  FIXED IN          TYPE       VULNERABILITY   SEVERITY  EPSS           RISK   
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39820  High      < 0.1% (17th)  < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-42499  High      < 0.1% (6th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39836  High      < 0.1% (5th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-33814  High      < 0.1% (5th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-33811  High      < 0.1% (4th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39826  Medium    < 0.1% (2nd)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39825  Medium    < 0.1% (1st)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-42501  High      < 0.1% (0th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39823  Medium    < 0.1% (1st)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39819  Medium    < 0.1% (0th)   < 0.1  
+stdlib  go1.26.2   1.25.10, *1.26.3  go-module  CVE-2026-39817  Medium    < 0.1% (0th)   < 0.1

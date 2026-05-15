@@ -1,0 +1,12 @@
+package: sed
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/sed:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/sed-*.spdx.json:

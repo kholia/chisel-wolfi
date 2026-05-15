@@ -1,0 +1,13 @@
+package: popt
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libpopt.so.0:
+      /usr/lib/libpopt.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/popt-*.spdx.json:

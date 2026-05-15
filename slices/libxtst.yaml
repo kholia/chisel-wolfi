@@ -1,0 +1,13 @@
+package: libxtst
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libx11_libs:
+      libxext_libs:
+      libxi_libs:
+    contents:
+      /usr/lib/libXtst.so.6:
+      /usr/lib/libXtst.so.6.*:
+      /var/lib/db/sbom/libxtst-*.spdx.json:

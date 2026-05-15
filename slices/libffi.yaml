@@ -1,0 +1,14 @@
+package: libffi
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib64/libffi.so:
+      /usr/lib64/libffi.so.8:
+      /usr/lib64/libffi.so.8.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libffi-*.spdx.json:

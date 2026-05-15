@@ -1,0 +1,11 @@
+package: fontconfig-config
+
+slices:
+  data:
+    contents:
+      /etc/fonts/**:
+      /usr/share/fontconfig/**:
+      /usr/share/gettext/its/fontconfig.its:
+      /usr/share/gettext/its/fontconfig.loc:
+      /usr/share/xml/fontconfig/**:
+      /var/lib/db/sbom/fontconfig-config-*.spdx.json:

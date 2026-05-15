@@ -1,0 +1,17 @@
+package: grafana-alloy
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libsystemd_libs:
+    contents:
+      /usr/bin/alloy:
+
+  config:
+    contents:
+      /etc/alloy/config.alloy:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/grafana-alloy-*.spdx.json:

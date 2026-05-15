@@ -1,0 +1,10 @@
+package: java-cacerts
+
+slices:
+  data:
+    essential:
+      ca-certificates-bundle_certs:
+    contents:
+      /etc/ca-certificates/update.d/java-cacerts:
+      /etc/ssl/certs/java/cacerts:
+      /var/lib/db/sbom/java-cacerts-*.spdx.json:

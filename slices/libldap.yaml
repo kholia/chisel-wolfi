@@ -1,0 +1,19 @@
+package: libldap
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      cyrus-sasl-heimdal-libs_libs:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /etc/openldap/ldap.conf:
+      /usr/lib/liblber.so.2:
+      /usr/lib/liblber.so.2.*:
+      /usr/lib/libldap.so.2:
+      /usr/lib/libldap.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libldap-*.spdx.json:

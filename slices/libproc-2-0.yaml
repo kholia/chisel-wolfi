@@ -1,0 +1,13 @@
+package: libproc-2-0
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libproc2.so.1:
+      /usr/lib/libproc2.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libproc-2-0-*.spdx.json:

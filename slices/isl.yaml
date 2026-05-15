@@ -1,0 +1,11 @@
+package: isl
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      gmp_libs:
+    contents:
+      /usr/lib/libisl.so.23:
+      /usr/lib/libisl.so.23.*:
+      /var/lib/db/sbom/isl-*.spdx.json:

@@ -1,0 +1,17 @@
+package: grafana-13.0
+
+slices:
+  server:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/grafana:
+      /usr/share/grafana/**:
+
+  config:
+    contents:
+      /etc/grafana/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/grafana-13.0-[0-9]*.spdx.json:

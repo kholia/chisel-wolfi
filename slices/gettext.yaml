@@ -1,0 +1,22 @@
+package: gettext
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/gettext:
+      /usr/bin/ngettext:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gettext-0*.spdx.json:
+      /var/lib/db/sbom/gettext-1*.spdx.json:
+      /var/lib/db/sbom/gettext-2*.spdx.json:
+      /var/lib/db/sbom/gettext-3*.spdx.json:
+      /var/lib/db/sbom/gettext-4*.spdx.json:
+      /var/lib/db/sbom/gettext-5*.spdx.json:
+      /var/lib/db/sbom/gettext-6*.spdx.json:
+      /var/lib/db/sbom/gettext-7*.spdx.json:
+      /var/lib/db/sbom/gettext-8*.spdx.json:
+      /var/lib/db/sbom/gettext-9*.spdx.json:

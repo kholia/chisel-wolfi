@@ -15,6 +15,7 @@ import (
 
 	"github.com/klauspost/compress/zstd"
 
+	"github.com/canonical/chisel/internal/apk"
 	"github.com/canonical/chisel/internal/archive"
 	"github.com/canonical/chisel/internal/deb"
 	"github.com/canonical/chisel/internal/fsutil"
@@ -242,7 +243,10 @@ func Run(options *RunOptions) error {
 			Package:   slice.Package,
 			Extract:   extract[slice.Package],
 			TargetDir: targetDir,
-			Create:    create,
+			DataReader: func(pkgReader io.ReadSeeker) (io.ReadCloser, error) {
+				return archive.DataReader(pkgArchive[slice.Package].Options().Kind, pkgReader)
+			},
+			Create: create,
 		})
 		reader.Close()
 		packages[slice.Package] = nil
@@ -347,7 +351,91 @@ func Run(options *RunOptions) error {
 		return err
 	}
 
+	err = generateAPKInstalledDatabase(targetDir, pkgInfos)
+	if err != nil {
+		return err
+	}
+
 	return generateManifests(targetDir, options.Selection, report, pkgInfos)
+}
+
+func generateAPKInstalledDatabase(targetDir string, pkgInfos []*archive.PackageInfo) error {
+	var pkgs []apk.InstalledPackage
+	for _, info := range pkgInfos {
+		if info.Kind != archive.KindAPK {
+			continue
+		}
+		pkgs = append(pkgs, apk.InstalledPackage{
+			Name:          info.Name,
+			Version:       info.Version,
+			Arch:          info.Arch,
+			Checksum:      info.APKChecksum,
+			Size:          info.Size,
+			InstalledSize: info.InstalledSize,
+		})
+	}
+	if len(pkgs) == 0 {
+		return nil
+	}
+
+	dbDir, err := apkDatabaseDir(targetDir)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(dbDir, 0755)
+	if err != nil {
+		return fmt.Errorf("cannot create APK database directory: %w", err)
+	}
+
+	var buf bytes.Buffer
+	err = apk.WriteInstalledDatabase(&buf, pkgs)
+	if err != nil {
+		return fmt.Errorf("cannot generate APK installed database: %w", err)
+	}
+
+	dbPath := filepath.Join(dbDir, "installed")
+	err = os.WriteFile(dbPath, buf.Bytes(), 0644)
+	if err != nil {
+		return fmt.Errorf("cannot write APK installed database: %w", err)
+	}
+	return nil
+}
+
+func apkDatabaseDir(targetDir string) (string, error) {
+	libPath := filepath.Join(targetDir, "lib")
+	info, err := os.Lstat(libPath)
+	if os.IsNotExist(err) {
+		return filepath.Join(libPath, "apk", "db"), nil
+	}
+	if err != nil {
+		return "", fmt.Errorf("cannot inspect APK database root: %w", err)
+	}
+	if info.Mode()&fs.ModeSymlink == 0 {
+		return filepath.Join(libPath, "apk", "db"), nil
+	}
+
+	link, err := os.Readlink(libPath)
+	if err != nil {
+		return "", fmt.Errorf("cannot read APK database root symlink: %w", err)
+	}
+
+	var resolved string
+	if filepath.IsAbs(link) {
+		resolved = filepath.Join(targetDir, strings.TrimPrefix(filepath.Clean(link), string(filepath.Separator)))
+	} else {
+		resolved = filepath.Join(filepath.Dir(libPath), link)
+	}
+	resolved = filepath.Clean(resolved)
+
+	rel, err := filepath.Rel(targetDir, resolved)
+	if err != nil {
+		return "", fmt.Errorf("cannot resolve APK database root symlink: %w", err)
+	}
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return "", fmt.Errorf("APK database root symlink escapes target root: %s", link)
+	}
+
+	return filepath.Join(resolved, "apk", "db"), nil
 }
 
 func generateManifests(targetDir string, selection *setup.Selection,

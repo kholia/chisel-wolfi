@@ -1,0 +1,13 @@
+package: file
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libmagic_libs:
+    contents:
+      /usr/bin/file:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/file-*.spdx.json:

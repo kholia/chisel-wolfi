@@ -1,0 +1,12 @@
+package: opentelemetry-collector-contrib
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/otelcol-contrib:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/opentelemetry-collector-contrib-*.spdx.json:

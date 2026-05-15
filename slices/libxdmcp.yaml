@@ -1,0 +1,10 @@
+package: libxdmcp
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libXdmcp.so.6:
+      /usr/lib/libXdmcp.so.6.*:
+      /var/lib/db/sbom/libxdmcp-*.spdx.json:

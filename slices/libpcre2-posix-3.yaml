@@ -1,0 +1,14 @@
+package: libpcre2-posix-3
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libpcre2-8-0_libs:
+    contents:
+      /usr/lib/libpcre2-posix.so.3:
+      /usr/lib/libpcre2-posix.so.3.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libpcre2-posix-3-*.spdx.json:

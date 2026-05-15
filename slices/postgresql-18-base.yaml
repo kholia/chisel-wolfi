@@ -1,0 +1,30 @@
+package: postgresql-18-base
+
+slices:
+  runtime:
+    essential:
+      glibc_runtime:
+      icu78-data-full_data:
+      krb5-libs_libs:
+      libLLVM-19_libs:
+      libcrypto3_libs:
+      libgcc_libs:
+      libicu78_libs:
+      libldap_libs:
+      liblz4-1_libs:
+      libpq-18_libs:
+      libssl3_libs:
+      libstdc++_libs:
+      libxml2-16_libs:
+      libzstd1_libs:
+      linux-pam_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/postgres18:
+      /usr/lib/postgresql18/**:
+      /usr/libexec/postgresql18/**:
+      /usr/share/postgresql18/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/postgresql-18-base-*.spdx.json:

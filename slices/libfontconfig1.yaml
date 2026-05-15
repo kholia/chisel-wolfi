@@ -1,0 +1,13 @@
+package: libfontconfig1
+
+slices:
+  libs:
+    essential:
+      fontconfig-config_data:
+      freetype_libs:
+      glibc_runtime:
+      libexpat1_libs:
+    contents:
+      /usr/lib/libfontconfig.so.1:
+      /usr/lib/libfontconfig.so.1.*:
+      /var/lib/db/sbom/libfontconfig1-*.spdx.json:

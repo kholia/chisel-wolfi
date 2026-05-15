@@ -1,0 +1,18 @@
+package: openssl
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /etc/ssl/misc/CA.pl:
+      /etc/ssl/misc/tsget:
+      /etc/ssl/misc/tsget.pl:
+      /etc/ssl/openssl.cnf:
+      /usr/bin/openssl:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/openssl-*.spdx.json:

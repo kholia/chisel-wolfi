@@ -1,0 +1,21 @@
+package: libelf
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libbz2-1_libs:
+      libzstd1_libs:
+      xz_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libasm-*.so:
+      /usr/lib/libasm.so.1:
+      /usr/lib/libdw-*.so:
+      /usr/lib/libdw.so.1:
+      /usr/lib/libelf-*.so:
+      /usr/lib/libelf.so.1:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libelf-*.spdx.json:

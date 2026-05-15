@@ -1,0 +1,27 @@
+package: busybox
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libxcrypt_libs:
+    contents:
+      /usr/bin/busybox:
+
+  shell:
+    essential:
+      busybox_bins:
+    contents:
+      /usr/bin/sh: {symlink: /usr/bin/busybox}
+
+  applet-paths:
+    contents:
+      /etc/busybox-paths.d/busybox:
+
+  securetty:
+    contents:
+      /etc/securetty:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/busybox-*.spdx.json:

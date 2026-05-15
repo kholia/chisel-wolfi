@@ -1,0 +1,23 @@
+package: valkey-9.0
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /usr/bin/redis-benchmark:
+      /usr/bin/redis-check-aof:
+      /usr/bin/redis-check-rdb:
+      /usr/bin/redis-cli:
+      /usr/bin/redis-sentinel:
+      /usr/bin/redis-server:
+      /usr/bin/valkey-check-aof:
+      /usr/bin/valkey-check-rdb:
+      /usr/bin/valkey-sentinel:
+      /usr/bin/valkey-server:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/valkey-9.0-*.spdx.json:

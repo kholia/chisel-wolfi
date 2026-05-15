@@ -1,0 +1,15 @@
+package: npm
+
+slices:
+  bins:
+    essential:
+      node-gyp_bins:
+      nodejs-24_bins:
+    contents:
+      /usr/bin/npm:
+      /usr/bin/npx:
+      /usr/lib/node_modules/npm/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/npm-*.spdx.json:

@@ -2,6 +2,8 @@ package archive
 
 import (
 	"compress/gzip"
+	"crypto/rsa"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -12,6 +14,7 @@ import (
 
 	"golang.org/x/crypto/openpgp/packet"
 
+	"github.com/canonical/chisel/internal/apk"
 	"github.com/canonical/chisel/internal/cache"
 	"github.com/canonical/chisel/internal/control"
 	"github.com/canonical/chisel/internal/deb"
@@ -26,14 +29,27 @@ type Archive interface {
 }
 
 type PackageInfo struct {
-	Name    string
-	Version string
-	Arch    string
-	SHA256  string
+	Name          string
+	Version       string
+	Arch          string
+	SHA256        string
+	Kind          Kind
+	APKChecksum   string
+	Size          int64
+	InstalledSize int64
 }
+
+type Kind string
+
+const (
+	KindDeb Kind = "deb"
+	KindAPK Kind = "apk"
+)
 
 type Options struct {
 	Label      string
+	Kind       Kind
+	URL        string
 	Version    string
 	Arch       string
 	Suites     []string
@@ -41,6 +57,7 @@ type Options struct {
 	Pro        string
 	CacheDir   string
 	PubKeys    []*packet.PublicKey
+	RSAPubKeys []*rsa.PublicKey
 	// Maintained is set when the archive is still being updated.
 	Maintained bool
 	// OldRelease is set for Ubuntu releases which are moved from the regular
@@ -50,15 +67,54 @@ type Options struct {
 
 func Open(options *Options) (Archive, error) {
 	var err error
+	kind := options.Kind
+	if kind == "" {
+		kind = KindDeb
+	}
 	if options.Arch == "" {
-		options.Arch, err = deb.InferArch()
+		switch kind {
+		case KindDeb:
+			options.Arch, err = deb.InferArch()
+		case KindAPK:
+			options.Arch, err = apk.InferArch()
+		default:
+			err = fmt.Errorf("invalid archive kind: %q", kind)
+		}
 	} else {
-		err = deb.ValidateArch(options.Arch)
+		switch kind {
+		case KindDeb:
+			err = deb.ValidateArch(options.Arch)
+		case KindAPK:
+			err = apk.ValidateArch(options.Arch)
+		default:
+			err = fmt.Errorf("invalid archive kind: %q", kind)
+		}
 	}
 	if err != nil {
 		return nil, err
 	}
-	return openUbuntu(options)
+	switch kind {
+	case KindDeb:
+		return openUbuntu(options)
+	case KindAPK:
+		return openAPK(options)
+	default:
+		return nil, fmt.Errorf("invalid archive kind: %q", kind)
+	}
+}
+
+func DataReader(kind Kind, pkgReader io.ReadSeeker) (io.ReadCloser, error) {
+	if kind == "" {
+		kind = KindDeb
+	}
+	switch kind {
+	case KindDeb:
+		return deb.DataReader(pkgReader)
+	case KindAPK:
+		return apk.DataReader(pkgReader)
+	default:
+		return nil, fmt.Errorf("invalid archive kind: %q", kind)
+	}
 }
 
 type fetchFlags uint
@@ -453,4 +509,218 @@ func (index *ubuntuIndex) displayName() string {
 		return index.label
 	}
 	return index.label + " " + index.archive.options.Pro + " (pro)"
+}
+
+type apkArchive struct {
+	options Options
+	index   *apk.Index
+	cache   *cache.Cache
+	baseURL string
+	pubKeys []*rsa.PublicKey
+}
+
+func (a *apkArchive) Options() *Options {
+	return &a.options
+}
+
+func (a *apkArchive) Exists(pkg string) bool {
+	_, err := a.index.SelectPackage(pkg, a.options.Arch)
+	return err == nil
+}
+
+func (a *apkArchive) Fetch(pkg string) (io.ReadSeekCloser, *PackageInfo, error) {
+	selected, err := a.index.SelectPackage(pkg, a.options.Arch)
+	if err != nil {
+		return nil, nil, err
+	}
+	path := apkPackageFilename(selected)
+	logf("Fetching %s...", path)
+	reader, digest, err := a.fetch(path, "", fetchBulk)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = a.verifyPackageSignature(reader)
+	if err != nil {
+		reader.Close()
+		return nil, nil, err
+	}
+	if selected.Checksum != "" {
+		checksum, err := apk.ControlChecksum(reader)
+		if err != nil {
+			reader.Close()
+			return nil, nil, fmt.Errorf("cannot verify package checksum: %v", err)
+		}
+		if checksum != selected.Checksum {
+			reader.Close()
+			return nil, nil, fmt.Errorf("package checksum mismatch: expected %s, got %s", selected.Checksum, checksum)
+		}
+		_, err = reader.Seek(0, io.SeekStart)
+		if err != nil {
+			reader.Close()
+			return nil, nil, err
+		}
+	}
+	info := apkPackageInfo(selected)
+	info.SHA256 = digest
+	return reader, info, nil
+}
+
+func (a *apkArchive) Info(pkg string) (*PackageInfo, error) {
+	selected, err := a.index.SelectPackage(pkg, a.options.Arch)
+	if err != nil {
+		return nil, err
+	}
+	return apkPackageInfo(selected), nil
+}
+
+func openAPK(options *Options) (Archive, error) {
+	if options.URL == "" {
+		return nil, fmt.Errorf("archive options missing url")
+	}
+	if len(options.RSAPubKeys) == 0 {
+		return nil, fmt.Errorf("archive options missing APK RSA public keys")
+	}
+
+	archive := &apkArchive{
+		options: *options,
+		cache: &cache.Cache{
+			Dir: options.CacheDir,
+		},
+		baseURL: options.URL,
+		pubKeys: options.RSAPubKeys,
+	}
+
+	logf("Fetching APK index for %s %s...", options.Label, options.Arch)
+	reader, _, err := archive.fetch("APKINDEX.tar.gz", "", fetchBulk)
+	if err != nil {
+		return nil, err
+	}
+	defer reader.Close()
+	err = archive.verifySignature(reader, "APKINDEX")
+	if err != nil {
+		return nil, err
+	}
+
+	indexReader, err := apk.IndexReader(reader)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read APKINDEX: %v", err)
+	}
+	defer indexReader.Close()
+
+	index, err := apk.ParseIndex(indexReader)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse APKINDEX: %v", err)
+	}
+	archive.index = index
+	return archive, nil
+}
+
+func (a *apkArchive) verifySignature(reader io.ReadSeeker, label string) error {
+	_, err := reader.Seek(0, io.SeekStart)
+	if err != nil {
+		return err
+	}
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return err
+	}
+	err = apk.VerifySignature(data, a.pubKeys)
+	if err != nil {
+		return fmt.Errorf("cannot verify %s signature: %v", label, err)
+	}
+	_, err = reader.Seek(0, io.SeekStart)
+	return err
+}
+
+func (a *apkArchive) verifyPackageSignature(reader io.ReadSeeker) error {
+	_, err := reader.Seek(0, io.SeekStart)
+	if err != nil {
+		return err
+	}
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return err
+	}
+	err = apk.VerifySignature(data, a.pubKeys)
+	if err != nil && !errors.Is(err, apk.ErrNoSignature) {
+		return fmt.Errorf("cannot verify package signature: %v", err)
+	}
+	_, err = reader.Seek(0, io.SeekStart)
+	return err
+}
+
+func (a *apkArchive) fetch(path, digest string, flags fetchFlags) (io.ReadSeekCloser, string, error) {
+	reader, err := a.cache.Open(digest)
+	if err == nil {
+		return reader, digest, nil
+	} else if err != cache.ErrMiss {
+		return nil, "", err
+	}
+
+	cleanURL, err := url.JoinPath(a.archURL(), path)
+	if err != nil {
+		return nil, "", fmt.Errorf("internal error: cannot construct URL: %v", err)
+	}
+	req, err := http.NewRequest("GET", cleanURL, nil)
+	if err != nil {
+		return nil, "", fmt.Errorf("cannot create HTTP request: %v", err)
+	}
+	var resp *http.Response
+	if flags&fetchBulk != 0 {
+		resp, err = bulkDo(req)
+	} else {
+		resp, err = httpDo(req)
+	}
+	if err != nil {
+		return nil, "", fmt.Errorf("cannot talk to archive: %v", err)
+	}
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case 200:
+	case 401:
+		return nil, "", fmt.Errorf("cannot fetch from %q: unauthorized", a.options.Label)
+	case 404:
+		return nil, "", fmt.Errorf("cannot find archive data")
+	default:
+		return nil, "", fmt.Errorf("error from archive: %v", resp.Status)
+	}
+
+	writer := a.cache.Create(digest)
+	defer writer.Close()
+
+	_, err = io.Copy(writer, resp.Body)
+	if err == nil {
+		err = writer.Close()
+	}
+	if err != nil {
+		return nil, "", fmt.Errorf("cannot fetch from archive: %v", err)
+	}
+
+	reader, err = a.cache.Open(writer.Digest())
+	return reader, writer.Digest(), err
+}
+
+func (a *apkArchive) archURL() string {
+	base := strings.TrimRight(a.baseURL, "/")
+	if strings.HasSuffix(base, "/"+a.options.Arch) {
+		return base
+	}
+	return base + "/" + a.options.Arch
+}
+
+func apkPackageFilename(pkg *apk.Package) string {
+	return pkg.Name + "-" + pkg.Version + ".apk"
+}
+
+func apkPackageInfo(pkg *apk.Package) *PackageInfo {
+	return &PackageInfo{
+		Name:          pkg.Name,
+		Version:       pkg.Version,
+		Arch:          pkg.Arch,
+		Kind:          KindAPK,
+		APKChecksum:   pkg.Checksum,
+		Size:          pkg.Size,
+		InstalledSize: pkg.Installed,
+	}
 }

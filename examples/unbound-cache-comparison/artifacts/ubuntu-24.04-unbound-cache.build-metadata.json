@@ -1,0 +1,58 @@
+{
+  "buildx.build.provenance": {
+    "builder": {
+      "id": ""
+    },
+    "buildType": "https://mobyproject.org/buildkit@v1",
+    "materials": [
+      {
+        "uri": "pkg:docker/docker/dockerfile@1",
+        "digest": {
+          "sha256": "87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89"
+        }
+      },
+      {
+        "uri": "pkg:docker/ubuntu@24.04?platform=linux%2Farm64",
+        "digest": {
+          "sha256": "c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b"
+        }
+      }
+    ],
+    "invocation": {
+      "configSource": {
+        "entryPoint": "Dockerfile.ubuntu-24.04"
+      },
+      "parameters": {
+        "frontend": "gateway.v0",
+        "args": {
+          "cmdline": "docker/dockerfile:1",
+          "source": "docker/dockerfile:1"
+        },
+        "locals": [
+          {
+            "name": "context"
+          },
+          {
+            "name": "dockerfile"
+          }
+        ]
+      },
+      "environment": {
+        "platform": "linux/arm64"
+      }
+    }
+  },
+  "buildx.build.ref": "colima/colima/3wrkxwlrekh2lemfwrr1vmbff",
+  "containerimage.config.digest": "sha256:7d69e03133697ce5e726392843f0cf23687e05d91ad1f51f111302a48b79a3a6",
+  "containerimage.descriptor": {
+    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "digest": "sha256:b49b282053514b7acd09f5bf6a08704491e0f33bf61d418874391e4891915f00",
+    "size": 703,
+    "platform": {
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  },
+  "containerimage.digest": "sha256:b49b282053514b7acd09f5bf6a08704491e0f33bf61d418874391e4891915f00",
+  "image.name": "docker.io/library/chisel-demo:ubuntu-2404-unbound-cache"
+}

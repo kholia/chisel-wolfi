@@ -1,0 +1,14 @@
+package: node-gyp
+
+slices:
+  bins:
+    essential:
+      nodejs-24_bins:
+      python-3.14-base_runtime:
+    contents:
+      /usr/bin/node-gyp:
+      /usr/lib/node_modules/node-gyp/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/node-gyp-*.spdx.json:

@@ -1,0 +1,30 @@
+package: stunnel
+
+slices:
+  bins:
+    essential:
+      stunnel_libs:
+    contents:
+      /usr/bin/stunnel:
+      /usr/bin/stunnel3:
+
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libgcc_libs:
+      libssl3_libs:
+    contents:
+      /usr/lib/stunnel/libstunnel.so:
+
+  config:
+    contents:
+      /etc/stunnel/stunnel.conf-sample:
+
+  state:
+    contents:
+      /var/lib/stunnel:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/stunnel-*.spdx.json:

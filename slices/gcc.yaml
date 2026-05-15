@@ -1,0 +1,77 @@
+package: gcc
+
+slices:
+  dev:
+    essential:
+      binutils_dev:
+      glibc-dev_dev:
+      gmp_libs:
+      isl_libs:
+      libstdc++-dev_dev:
+      mpc_libs:
+      mpfr_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/aarch64-unknown-linux-gnu-c++: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-c++-16: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-g++: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-g++-16: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-16: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-ar: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-ar-16: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-nm: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-nm-16: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-ranlib: {arch: aarch64}
+      /usr/bin/aarch64-unknown-linux-gnu-gcc-ranlib-16: {arch: aarch64}
+      /usr/bin/x86_64-pc-linux-gnu-c++: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-c++-16: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-g++: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-g++-16: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-16: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-ar: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-ar-16: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-nm: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-nm-16: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-ranlib: {arch: x86_64}
+      /usr/bin/x86_64-pc-linux-gnu-gcc-ranlib-16: {arch: x86_64}
+      /usr/bin/c++:
+      /usr/bin/c++-16:
+      /usr/bin/cpp:
+      /usr/bin/cpp-16:
+      /usr/bin/g++:
+      /usr/bin/g++-16:
+      /usr/bin/gcc:
+      /usr/bin/gcc-16:
+      /usr/bin/gcc-ar:
+      /usr/bin/gcc-ar-16:
+      /usr/bin/gcc-nm:
+      /usr/bin/gcc-nm-16:
+      /usr/bin/gcc-ranlib:
+      /usr/bin/gcc-ranlib-16:
+      /usr/bin/gcov:
+      /usr/bin/gcov-16:
+      /usr/bin/gcov-dump:
+      /usr/bin/gcov-dump-16:
+      /usr/bin/gcov-tool:
+      /usr/bin/gcov-tool-16:
+      /usr/bin/lto-dump:
+      /usr/bin/lto-dump-16:
+      /usr/lib/gcc/**:
+      /usr/lib/libasan*:
+      /usr/lib/libatomic*:
+      /usr/lib/libcc1*:
+      /usr/lib/libgcc_s.so:
+      /usr/lib/libgomp*:
+      /usr/lib/libhwasan*:
+      /usr/lib/libitm*:
+      /usr/lib/liblsan*:
+      /usr/lib/libsanitizer.spec:
+      /usr/lib/libstdc++.modules.json:
+      /usr/lib/libstdc++exp.a:
+      /usr/lib/libstdc++fs.a:
+      /usr/lib/libtsan*:
+      /usr/lib/libubsan*:
+      /usr/libexec/gcc/**:
+      /var/lib/db/sbom/gcc-*.spdx.json:

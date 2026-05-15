@@ -1,0 +1,14 @@
+package: build-base
+
+slices:
+  dev:
+    essential:
+      binutils_dev:
+      gcc_dev:
+      glibc-dev_dev:
+      libstdc++-dev_dev:
+      linux-headers_dev:
+      make_bins:
+      pkgconf_bins:
+    contents:
+      /var/lib/db/sbom/build-base-*.spdx.json:

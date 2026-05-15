@@ -1,0 +1,18 @@
+package: unbound-config
+
+slices:
+  config:
+    contents:
+      /etc/unbound/unbound.conf:
+    mutate: |
+      passwd = content.read("/etc/passwd")
+      if not "\nunbound:" in "\n" + passwd:
+          if passwd[-1:] != "\n":
+              passwd += "\n"
+          content.write("/etc/passwd", passwd + "unbound:x:65532:65532:Unbound DNS resolver:/var/lib/unbound:/sbin/nologin\n")
+
+      group = content.read("/etc/group")
+      if not "\nunbound:" in "\n" + group:
+          if group[-1:] != "\n":
+              group += "\n"
+          content.write("/etc/group", group + "unbound:x:65532:\n")

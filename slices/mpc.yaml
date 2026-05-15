@@ -1,0 +1,12 @@
+package: mpc
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      gmp_libs:
+      mpfr_libs:
+    contents:
+      /usr/lib/libmpc.so.3:
+      /usr/lib/libmpc.so.3.*:
+      /var/lib/db/sbom/mpc-*.spdx.json:

@@ -1,0 +1,38 @@
+package: unbound
+
+slices:
+  daemon:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libevent_libs:
+      libssl3_libs:
+      libsodium_libs:
+      unbound-config_config:
+    contents:
+      /usr/bin/unbound:
+      /usr/bin/unbound-checkconf:
+
+  tools:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libevent_libs:
+      libexpat1_libs:
+      libssl3_libs:
+      libsodium_libs:
+      unbound-libs_libs:
+    contents:
+      /usr/bin/unbound-anchor:
+      /usr/bin/unbound-control:
+      /usr/bin/unbound-control-setup:
+      /usr/bin/unbound-host:
+
+  bins:
+    essential:
+      unbound_daemon:
+      unbound_tools:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/unbound-?.*.spdx.json:

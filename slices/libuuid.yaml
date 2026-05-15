@@ -1,0 +1,13 @@
+package: libuuid
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libuuid.so.1:
+      /usr/lib/libuuid.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libuuid-*.spdx.json:

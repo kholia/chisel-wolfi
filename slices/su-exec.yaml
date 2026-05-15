@@ -1,0 +1,12 @@
+package: su-exec
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/su-exec:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/su-exec-*.spdx.json:

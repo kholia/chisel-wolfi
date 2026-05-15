@@ -1,0 +1,10 @@
+package: gmp
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libgmp.so.10:
+      /usr/lib/libgmp.so.10.*:
+      /var/lib/db/sbom/gmp-*.spdx.json:

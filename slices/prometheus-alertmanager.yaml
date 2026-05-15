@@ -1,0 +1,15 @@
+package: prometheus-alertmanager
+
+slices:
+  bins:
+    contents:
+      /usr/bin/alertmanager:
+      /usr/bin/amtool:
+
+  config:
+    contents:
+      /etc/alertmanager/alertmanager.yml:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/prometheus-alertmanager-*.spdx.json:

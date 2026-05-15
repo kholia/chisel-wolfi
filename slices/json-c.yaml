@@ -1,0 +1,13 @@
+package: json-c
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libjson-c.so.5:
+      /usr/lib/libjson-c.so.5.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/json-c-*.spdx.json:

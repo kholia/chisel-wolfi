@@ -1,0 +1,13 @@
+package: libxcrypt
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libcrypt.so.1:
+      /usr/lib/libcrypt.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libxcrypt-*.spdx.json:

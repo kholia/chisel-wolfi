@@ -1,0 +1,13 @@
+package: libcom_err
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libcom_err.so.2:
+      /usr/lib/libcom_err.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libcom_err-*.spdx.json:

@@ -1,0 +1,14 @@
+package: alsa-lib
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/aserver:
+      /usr/lib/libasound.so.2:
+      /usr/lib/libasound.so.2.*:
+      /usr/lib/libatopology.so.2:
+      /usr/lib/libatopology.so.2.*:
+      /usr/share/alsa/**:
+      /var/lib/db/sbom/alsa-lib-*.spdx.json:

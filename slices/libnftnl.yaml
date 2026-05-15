@@ -1,0 +1,14 @@
+package: libnftnl
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libmnl_libs:
+    contents:
+      /usr/lib/libnftnl.so.11:
+      /usr/lib/libnftnl.so.11.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libnftnl-*.spdx.json:

@@ -1,0 +1,16 @@
+package: attr
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libattr1_libs:
+    contents:
+      /etc/xattr.conf:
+      /usr/bin/attr:
+      /usr/bin/getfattr:
+      /usr/bin/setfattr:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/attr-*.spdx.json:

@@ -1,0 +1,14 @@
+package: xxhash-libs
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libxxhash.so:
+      /usr/lib/libxxhash.so.0:
+      /usr/lib/libxxhash.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/xxhash-libs-*.spdx.json:

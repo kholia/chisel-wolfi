@@ -1,0 +1,16 @@
+package: readline
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      ncurses_libs:
+    contents:
+      /usr/lib/libhistory.so.8:
+      /usr/lib/libhistory.so.8.*:
+      /usr/lib/libreadline.so.8:
+      /usr/lib/libreadline.so.8.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/readline-*.spdx.json:

@@ -34,6 +34,15 @@ var sliceKeyTests = []struct {
 	input:    "foo_slice123",
 	expected: apacheutil.SliceKey{Package: "foo", Slice: "slice123"},
 }, {
+	input:    "foo_bar_baz",
+	expected: apacheutil.SliceKey{Package: "foo_bar", Slice: "baz"},
+}, {
+	input:    "libcom_err_libs",
+	expected: apacheutil.SliceKey{Package: "libcom_err", Slice: "libs"},
+}, {
+	input:    "libLLVM-19_libs",
+	expected: apacheutil.SliceKey{Package: "libLLVM-19", Slice: "libs"},
+}, {
 	input:    "g++_bins",
 	expected: apacheutil.SliceKey{Package: "g++", Slice: "bins"},
 }, {
@@ -66,9 +75,6 @@ var sliceKeyTests = []struct {
 }, {
 	input: "-foo_bar",
 	err:   `invalid slice reference: "-foo_bar"`,
-}, {
-	input: "foo_bar_baz",
-	err:   `invalid slice reference: "foo_bar_baz"`,
 }, {
 	input: "a-_bar",
 	err:   `invalid slice reference: "a-_bar"`,

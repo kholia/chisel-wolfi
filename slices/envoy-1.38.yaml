@@ -1,0 +1,12 @@
+package: envoy-1.38
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/envoy:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/envoy-1.38-[0-9]*.spdx.json:

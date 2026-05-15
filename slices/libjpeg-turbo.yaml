@@ -1,0 +1,12 @@
+package: libjpeg-turbo
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libjpeg.so.8:
+      /usr/lib/libjpeg.so.8.*:
+      /usr/lib/libturbojpeg.so.0:
+      /usr/lib/libturbojpeg.so.0.*:
+      /var/lib/db/sbom/libjpeg-turbo-*.spdx.json:

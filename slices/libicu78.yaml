@@ -1,0 +1,19 @@
+package: libicu78
+
+slices:
+  libs:
+    essential:
+      icu78-data-full_data:
+      glibc_runtime:
+      libgcc_libs:
+      libstdc++_libs:
+    contents:
+      /usr/lib/libicudata.so.78:
+      /usr/lib/libicudata.so.78.*:
+      /usr/lib/libicui18n.so.78:
+      /usr/lib/libicui18n.so.78.*:
+      /usr/lib/libicuio.so.78:
+      /usr/lib/libicuio.so.78.*:
+      /usr/lib/libicuuc.so.78:
+      /usr/lib/libicuuc.so.78.*:
+      /var/lib/db/sbom/libicu78-*.spdx.json:

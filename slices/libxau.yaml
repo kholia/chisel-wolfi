@@ -1,0 +1,10 @@
+package: libxau
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libXau.so.6:
+      /usr/lib/libXau.so.6.*:
+      /var/lib/db/sbom/libxau-*.spdx.json:

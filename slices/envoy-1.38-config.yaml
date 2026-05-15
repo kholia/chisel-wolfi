@@ -1,0 +1,12 @@
+package: envoy-1.38-config
+
+slices:
+  config:
+    essential:
+      wolfi-baselayout_base:
+    contents:
+      /etc/envoy/envoy.yaml:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/envoy-1.38-config-*.spdx.json:

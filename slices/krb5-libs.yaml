@@ -1,0 +1,36 @@
+package: krb5-libs
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      krb5-conf_config:
+      keyutils-libs_libs:
+      libcom_err_libs:
+      libcrypto3_libs:
+      libssl3_libs:
+      libverto_libs:
+    contents:
+      /usr/lib/krb5/**:
+      /usr/lib/libgssapi_krb5.so.2:
+      /usr/lib/libgssapi_krb5.so.2.*:
+      /usr/lib/libgssrpc.so.4:
+      /usr/lib/libgssrpc.so.4.*:
+      /usr/lib/libk5crypto.so.3:
+      /usr/lib/libk5crypto.so.3.*:
+      /usr/lib/libkadm5clnt_mit.so.12:
+      /usr/lib/libkadm5clnt_mit.so.12.*:
+      /usr/lib/libkadm5srv_mit.so.12:
+      /usr/lib/libkadm5srv_mit.so.12.*:
+      /usr/lib/libkdb5.so.10:
+      /usr/lib/libkdb5.so.10.*:
+      /usr/lib/libkrad.so.0:
+      /usr/lib/libkrad.so.0.*:
+      /usr/lib/libkrb5.so.3:
+      /usr/lib/libkrb5.so.3.*:
+      /usr/lib/libkrb5support.so.0:
+      /usr/lib/libkrb5support.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/krb5-libs-*.spdx.json:

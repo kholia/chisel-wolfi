@@ -1,0 +1,12 @@
+package: docker-cli-buildx
+
+slices:
+  plugin:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/libexec/docker/cli-plugins/docker-buildx:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/docker-cli-buildx-*.spdx.json:

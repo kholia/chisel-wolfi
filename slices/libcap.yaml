@@ -1,0 +1,15 @@
+package: libcap
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libcap.so.2:
+      /usr/lib/libcap.so.2.*:
+      /usr/lib/libpsx.so.2:
+      /usr/lib/libpsx.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libcap-*.spdx.json:

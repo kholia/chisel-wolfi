@@ -1,0 +1,12 @@
+package: nodejs-24
+
+slices:
+  bins:
+    essential:
+      nodejs-24-minimal_runtime:
+    contents:
+      /usr/include/node/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/nodejs-24-24*.spdx.json:

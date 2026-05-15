@@ -1,0 +1,64 @@
+[
+    {
+        "Id": "sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035",
+        "RepoTags": [
+            "chisel-demo:chisel-wolfi-unbound-cache"
+        ],
+        "RepoDigests": [
+            "chisel-demo@sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-05-31T12:03:31.700737117+05:30",
+        "Config": {
+            "ExposedPorts": {
+                "53/tcp": {},
+                "53/udp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Entrypoint": [
+                "/usr/bin/unbound"
+            ],
+            "Cmd": [
+                "-d",
+                "-c",
+                "/etc/unbound/unbound.conf"
+            ],
+            "WorkingDir": "/",
+            "ArgsEscaped": true
+        },
+        "Architecture": "arm64",
+        "Os": "linux",
+        "Size": 11946405,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:5b37bd6dd4d4e61311dff40cacd8c0b303ae43bc1b5f00458414b408cb849eb1"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-05-31T06:57:53.882409669Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+            "digest": "sha256:95af3f461c22c33ca6c85dfef2c42bc28203fecfcddb88ff4ccd81080fd31035",
+            "size": 504,
+            "annotations": {
+                "config.digest": "sha256:dd66e1b44a1e99cc5efe42aff5931720146d85fcce54633f36a5ef5827c27a19"
+            }
+        },
+        "Identity": {
+            "Build": [
+                {
+                    "Ref": "hlqvont5fqk5r11uix9im4hq2",
+                    "CreatedAt": "2026-05-31T12:27:53.883959526+05:30"
+                },
+                {
+                    "Ref": "qidqsgz8f8afikn1tcavykjam",
+                    "CreatedAt": "2026-05-31T12:03:32.597982447+05:30"
+                }
+            ]
+        }
+    }
+]

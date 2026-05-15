@@ -25,6 +25,9 @@ type ExtractOptions struct {
 	Package   string
 	TargetDir string
 	Extract   map[string][]ExtractInfo
+	// DataReader can optionally be set to extract from a non-deb package
+	// format whose data payload is also a tar archive.
+	DataReader func(io.ReadSeeker) (io.ReadCloser, error)
 	// Create can optionally be set to control the creation of extracted entries.
 	// extractInfos is set to the matching entries in Extract, and is nil in cases where
 	// the created entry is implicit and unlisted (for example, parent directories).
@@ -87,7 +90,11 @@ func Extract(pkgReader io.ReadSeeker, options *ExtractOptions) (err error) {
 }
 
 func extractData(pkgReader io.ReadSeeker, options *ExtractOptions) error {
-	dataReader, err := DataReader(pkgReader)
+	openDataReader := options.DataReader
+	if openDataReader == nil {
+		openDataReader = DataReader
+	}
+	dataReader, err := openDataReader(pkgReader)
 	if err != nil {
 		return err
 	}
@@ -304,7 +311,11 @@ type extractHardLinkOptions struct {
 // extractHardLinks iterates through the tarball a second time to extract the
 // hard links that were not extracted in the first pass.
 func extractHardLinks(pkgReader io.ReadSeeker, opts *extractHardLinkOptions) error {
-	dataReader, err := DataReader(pkgReader)
+	openDataReader := opts.DataReader
+	if openDataReader == nil {
+		openDataReader = DataReader
+	}
+	dataReader, err := openDataReader(pkgReader)
 	if err != nil {
 		return err
 	}
@@ -342,6 +353,9 @@ func extractHardLinks(pkgReader io.ReadSeeker, opts *extractHardLinkOptions) err
 			Mode: tarHeader.FileInfo().Mode(),
 			Data: tarReader,
 		}
+		if tarHeader.Typeflag == tar.TypeSymlink {
+			createOptions.Link = tarHeader.Linkname
+		}
 		err = opts.Create(links[0].extractInfos, createOptions)
 		if err != nil {
 			return err
@@ -349,12 +363,15 @@ func extractHardLinks(pkgReader io.ReadSeeker, opts *extractHardLinkOptions) err
 
 		// Create the remaining hard links.
 		for _, link := range links[1:] {
+			linkTarget := absLink
+			if tarHeader.Typeflag == tar.TypeSymlink {
+				linkTarget = tarHeader.Linkname
+			}
 			createOptions := &fsutil.CreateOptions{
 				Root: opts.TargetDir,
 				Path: link.path,
 				Mode: tarHeader.FileInfo().Mode(),
-				// Link to the first file extracted for the hard links.
-				Link: absLink,
+				Link: linkTarget,
 			}
 			err := opts.Create(link.extractInfos, createOptions)
 			if err != nil {
@@ -430,11 +447,13 @@ func parentDirs(path string) []string {
 	return parents
 }
 
-// sanitizeTarPath removes the leading "./" from the source path in the tarball,
-// and verifies that the path is not empty.
+// sanitizeTarPath returns the tar path as an absolute package-root path.
 func sanitizeTarPath(path string) (string, bool) {
-	if len(path) < 3 || path[0] != '.' || path[1] != '/' {
+	if path == "" || path == "." || path == "./" || path[0] == '/' {
 		return "", false
 	}
-	return path[1:], true
+	if strings.HasPrefix(path, "./") {
+		return path[1:], true
+	}
+	return "/" + path, true
 }

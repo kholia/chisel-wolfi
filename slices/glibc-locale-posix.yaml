@@ -1,0 +1,12 @@
+package: glibc-locale-posix
+
+slices:
+  locale:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/locale/C.utf8/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/glibc-locale-posix-*.spdx.json:

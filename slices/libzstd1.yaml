@@ -1,0 +1,13 @@
+package: libzstd1
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libzstd.so.1:
+      /usr/lib/libzstd.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libzstd1-*.spdx.json:

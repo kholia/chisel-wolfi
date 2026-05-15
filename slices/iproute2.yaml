@@ -1,0 +1,40 @@
+package: iproute2
+
+slices:
+  bins:
+    essential:
+      db_libs:
+      glibc_runtime:
+      iptables_libs:
+      libbpf_libs:
+      libcap_libs:
+      libelf_libs:
+      libmnl_libs:
+      libselinux_libs:
+      libtirpc_libs:
+    contents:
+      /usr/bin/arpd:
+      /usr/bin/bridge:
+      /usr/bin/dcb:
+      /usr/bin/devlink:
+      /usr/bin/dpll:
+      /usr/bin/genl:
+      /usr/bin/ifstat:
+      /usr/bin/ip:
+      /usr/bin/lnstat:
+      /usr/bin/netshaper:
+      /usr/bin/nstat:
+      /usr/bin/rdma:
+      /usr/bin/routel:
+      /usr/bin/rtacct:
+      /usr/bin/rtmon:
+      /usr/bin/ss:
+      /usr/bin/tc:
+      /usr/bin/tipc:
+      /usr/bin/vdpa:
+      /usr/lib/tc/**:
+      /usr/share/iproute2/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/iproute2-*.spdx.json:

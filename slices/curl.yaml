@@ -1,0 +1,16 @@
+package: curl
+
+slices:
+  bins:
+    essential:
+      ca-certificates-bundle_certs:
+      glibc_runtime:
+      libcurl-openssl4_libs:
+      zlib_libs:
+    contents:
+      /usr/bin/curl:
+      /usr/bin/wcurl:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/curl-*.spdx.json:

@@ -1,0 +1,18 @@
+package: protobuf
+
+slices:
+  bins:
+    essential:
+      libprotobuf35.0.0_libs:
+      libprotoc35.0.0_libs:
+    contents:
+      /usr/bin/protoc-gen-upb:
+      /usr/bin/protoc-gen-upb-35.0.0:
+      /usr/bin/protoc-gen-upb_minitable:
+      /usr/bin/protoc-gen-upb_minitable-35.0.0:
+      /usr/bin/protoc-gen-upbdefs:
+      /usr/bin/protoc-gen-upbdefs-35.0.0:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/protobuf-[0-9]*.spdx.json:

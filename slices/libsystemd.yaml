@@ -1,0 +1,16 @@
+package: libsystemd
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      liblz4-1_libs:
+      libzstd1_libs:
+      xz_libs:
+    contents:
+      /usr/lib/libsystemd.so.0:
+      /usr/lib/libsystemd.so.0.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libsystemd-*.spdx.json:

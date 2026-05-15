@@ -1,0 +1,14 @@
+package: findutils
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libselinux_libs:
+    contents:
+      /usr/bin/find:
+      /usr/bin/xargs:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/findutils-*.spdx.json:

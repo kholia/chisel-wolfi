@@ -1,0 +1,15 @@
+package: libbpf
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libelf_libs:
+      zlib_libs:
+    contents:
+      /usr/lib/libbpf.so.1:
+      /usr/lib/libbpf.so.1.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libbpf-*.spdx.json:

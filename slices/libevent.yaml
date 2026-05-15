@@ -1,0 +1,29 @@
+package: libevent
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libssl3_libs:
+    contents:
+      /usr/lib/libevent-2.1.so.7:
+      /usr/lib/libevent-2.1.so.7.*:
+      /usr/lib/libevent_core-2.1.so.7:
+      /usr/lib/libevent_core-2.1.so.7.*:
+      /usr/lib/libevent_extra-2.1.so.7:
+      /usr/lib/libevent_extra-2.1.so.7.*:
+      /usr/lib/libevent_openssl-2.1.so.7:
+      /usr/lib/libevent_openssl-2.1.so.7.*:
+      /usr/lib/libevent_pthreads-2.1.so.7:
+      /usr/lib/libevent_pthreads-2.1.so.7.*:
+
+  bins:
+    essential:
+      libevent_libs:
+    contents:
+      /usr/bin/event_rpcgen.py:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libevent-*.spdx.json:

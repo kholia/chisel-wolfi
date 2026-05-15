@@ -1,0 +1,12 @@
+package: db
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libdb-*.so:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/db-*.spdx.json:

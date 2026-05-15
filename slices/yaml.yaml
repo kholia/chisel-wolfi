@@ -1,0 +1,13 @@
+package: yaml
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libyaml-0.so.2:
+      /usr/lib/libyaml-0.so.2.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/yaml-*.spdx.json:

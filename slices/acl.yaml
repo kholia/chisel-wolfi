@@ -1,0 +1,15 @@
+package: acl
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libacl1_libs:
+    contents:
+      /usr/bin/chacl:
+      /usr/bin/getfacl:
+      /usr/bin/setfacl:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/acl-*.spdx.json:

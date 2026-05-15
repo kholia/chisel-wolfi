@@ -1,0 +1,11 @@
+package: grpc-health-probe
+
+slices:
+  bins:
+    contents:
+      /usr/bin/grpc-health-probe:
+      /usr/bin/grpc_health_probe:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/grpc-health-probe-*.spdx.json:

@@ -1,0 +1,17 @@
+package: unbound-libs
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+      libcrypto3_libs:
+      libevent_libs:
+      libssl3_libs:
+      libsodium_libs:
+    contents:
+      /usr/lib/libunbound.so.8:
+      /usr/lib/libunbound.so.8.*:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/unbound-libs-*.spdx.json:

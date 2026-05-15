@@ -1,0 +1,14 @@
+package: libmagic
+
+slices:
+  libs:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/lib/libmagic.so.1:
+      /usr/lib/libmagic.so.1.*:
+      /usr/share/misc/magic.mgc:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/libmagic-*.spdx.json:

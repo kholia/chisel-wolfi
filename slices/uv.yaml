@@ -1,0 +1,14 @@
+package: uv
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+      libgcc_libs:
+    contents:
+      /usr/bin/uv:
+      /usr/bin/uvx:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/uv-*.spdx.json:

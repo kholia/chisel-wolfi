@@ -1,0 +1,16 @@
+package: maven-3.9
+
+slices:
+  bins:
+    essential:
+      busybox_shell:
+      coreutils_bins:
+      openjdk-21_jdk:
+    contents:
+      /usr/bin/mvn:
+      /usr/bin/mvnDebug:
+      /usr/share/java/maven/**:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/maven-3.9-*.spdx.json:

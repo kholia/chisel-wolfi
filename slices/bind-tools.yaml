@@ -1,0 +1,30 @@
+package: bind-tools
+
+slices:
+  bins:
+    essential:
+      bind-libs_libs:
+      glibc_runtime:
+      krb5-libs_libs:
+      libedit_libs:
+      protobuf-c_libs:
+    contents:
+      /usr/bin/arpaname:
+      /usr/bin/ddns-confgen:
+      /usr/bin/delv:
+      /usr/bin/dig:
+      /usr/bin/dnstap-read:
+      /usr/bin/host:
+      /usr/bin/mdig:
+      /usr/bin/named-checkzone:
+      /usr/bin/named-compilezone:
+      /usr/bin/named-journalprint:
+      /usr/bin/named-rrchecker:
+      /usr/bin/nslookup:
+      /usr/bin/nsupdate:
+      /usr/bin/rndc-confgen:
+      /usr/bin/tsig-keygen:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/bind-tools-*.spdx.json:

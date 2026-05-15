@@ -1,0 +1,10 @@
+package: gatekeeper-3.21
+
+slices:
+  manager:
+    contents:
+      /usr/bin/manager:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/gatekeeper-3.21-*.spdx.json:

@@ -1,0 +1,18 @@
+package: prometheus-3.11
+
+slices:
+  bins:
+    essential:
+      glibc_runtime:
+    contents:
+      /usr/bin/prometheus:
+      /usr/bin/promtool:
+
+  config:
+    contents:
+      /etc/conf.d/prometheus:
+      /etc/prometheus/prometheus.yml:
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/prometheus-3.11-*.spdx.json:

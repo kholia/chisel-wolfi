@@ -1,0 +1,15 @@
+package: ld-linux
+
+slices:
+  libs:
+    essential:
+      wolfi-baselayout_layout:
+    contents:
+      /etc/ld.so.conf:
+      /etc/ld.so.conf.d/libc.conf:
+      /usr/lib/ld-linux-aarch64.so.1: {arch: aarch64}
+      /usr/lib/ld-linux-x86-64.so.2: {arch: x86_64}
+
+  sbom:
+    contents:
+      /var/lib/db/sbom/ld-linux-*.spdx.json:
